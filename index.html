@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A Minha Wishlist</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Fontes criativas: Uma Serifada elegante e uma Monoespaçada técnica -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Cabeçalho com efeito Marquee (Texto a rolar) -->
+    <header class="header-marquee">
+      <div class="marquee-track">
+        <span
+          >WISHLIST 2024 ✦ IDEIAS DE PRENDAS ✦ SURPREENDE-ME ✦ WISHLIST 2024 ✦
+          IDEIAS DE PRENDAS ✦ SURPREENDE-ME ✦
+        </span>
+        <span
+          >WISHLIST 2024 ✦ IDEIAS DE PRENDAS ✦ SURPREENDE-ME ✦ WISHLIST 2024 ✦
+          IDEIAS DE PRENDAS ✦ SURPREENDE-ME ✦
+        </span>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="intro">
+        <h1 class="title-massive">Coisas<br /><em>que eu quero.</em></h1>
+        <p class="subtitle">
+          Uma coleção curada de desejos. Clica num item para veres onde comprar.
+        </p>
+      </section>
+
+      <!-- O grid será preenchido automaticamente pelo JavaScript -->
+      <section id="wishlist-grid" class="grid-container">
+        <!-- Cartões injetados aqui -->
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Feito com ☕ e código. Hospedado no GitHub Pages.</p>
+    </footer>
+
+    <!-- 1. Carrega os dados primeiro -->
+    <script src="data.js"></script>
+    <!-- 2. Carrega a lógica depois -->
+    <script src="script.js"></script>
+  </body>
+</html>
