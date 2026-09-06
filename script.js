@@ -127,4 +127,69 @@ document.addEventListener("DOMContentLoaded", () => {
   window.toggleReservation = toggleReservation;
 
   renderItems();
+  const themeToggle = document.getElementById("theme-toggle");
+  const themeIcon = document.getElementById("theme-icon");
+
+  const getSystemTheme = () => {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  };
+
+  const getStoredTheme = () => {
+    try {
+      return localStorage.getItem("wishlist_theme");
+    } catch (e) {
+      console.error("Error reading theme preference:", e);
+      return null;
+    }
+  };
+
+  const setStoredTheme = (theme) => {
+    try {
+      localStorage.setItem("wishlist_theme", theme);
+    } catch (e) {
+      console.error("Error saving theme preference:", e);
+    }
+  };
+
+  const applyTheme = (theme) => {
+    document.body.classList.remove("dark-mode", "light-mode");
+
+    if (theme === "dark") {
+      document.body.classList.add("dark-mode");
+      themeIcon.textContent = "☀️";
+    } else {
+      document.body.classList.add("light-mode");
+      themeIcon.textContent = "🌙";
+    }
+  };
+
+  const initTheme = () => {
+    const storedTheme = getStoredTheme();
+    const theme = storedTheme || getSystemTheme();
+    applyTheme(theme);
+  };
+
+  const toggleTheme = () => {
+    const currentTheme = document.body.classList.contains("dark-mode")
+      ? "dark"
+      : "light";
+    const newTheme = currentTheme === "dark" ? "light" : "dark";
+    applyTheme(newTheme);
+    setStoredTheme(newTheme);
+  };
+
+  themeToggle.addEventListener("click", toggleTheme);
+
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", (e) => {
+      const storedTheme = getStoredTheme();
+      if (!storedTheme) {
+        applyTheme(e.matches ? "dark" : "light");
+      }
+    });
+
+  initTheme();
 });
