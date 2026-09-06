@@ -8,9 +8,42 @@ document.addEventListener("DOMContentLoaded", () => {
     return div.innerHTML;
   };
 
+  const getReservedItems = () => {
+    try {
+      const reserved = localStorage.getItem("wishlist_reserved");
+      return reserved ? JSON.parse(reserved) : [];
+    } catch (e) {
+      console.error("Error reading reserved items:", e);
+      return [];
+    }
+  };
+
+  const toggleReservation = (id) => {
+    const reserved = getReservedItems();
+    const index = reserved.indexOf(id);
+
+    if (index > -1) {
+      reserved.splice(index, 1);
+    } else {
+      reserved.push(id);
+    }
+
+    try {
+      localStorage.setItem("wishlist_reserved", JSON.stringify(reserved));
+    } catch (e) {
+      console.error("Error saving reserved items:", e);
+    }
+
+    renderItems();
+  };
+
+  const isReserved = (id) => {
+    return getReservedItems().includes(id);
+  };
+
   const getPriorityBadge = (priority) => {
     const styles = {
-      high: { text: "QUERO MUITO", class: "badge-high" },
+      high: { text: "ALTA PRIORIDADE", class: "badge-high" },
       medium: { text: "SERIA GIRO", class: "badge-medium" },
       low: { text: "IDEIA SOLTA", class: "badge-low" },
     };
@@ -24,58 +57,65 @@ document.addEventListener("DOMContentLoaded", () => {
     const hasPrice = !!item.price;
     const hasLink = !!item.link;
     const hasDescription = !!item.description;
+    const reserved = isReserved(item.id);
 
     let mediaBlock = "";
     if (hasImage) {
       mediaBlock = `
-                <div class="card-image-wrapper">
-                    <img src="${escapeHTML(item.image)}" alt="Photo of ${escapeHTML(item.title)}" class="card-image" loading="${index < 3 ? "eager" : "lazy"}" decoding="async">
-                    ${tags.length ? `<div class="card-tags">${tags.map((t) => `<span class="tag">${escapeHTML(t)}</span>`).join("")}</div>` : ""}
-                </div>
-            `;
+        <div class="card-image-wrapper ${reserved ? "card-image-wrapper--reserved" : ""}">
+          <img src="${escapeHTML(item.image)}" alt="Foto de ${escapeHTML(item.title)}" class="card-image" loading="${index < 3 ? "eager" : "lazy"}" decoding="async">
+          ${tags.length ? `<div class="card-tags">${tags.map((t) => `<span class="tag">${escapeHTML(t)}</span>`).join("")}</div>` : ""}
+          ${reserved ? '<div class="reserved-overlay">RESERVADO</div>' : ""}
+        </div>
+      `;
     } else if (tags.length) {
       mediaBlock = `<div class="card-tags-top">${tags.map((t) => `<span class="tag">${escapeHTML(t)}</span>`).join("")}</div>`;
     }
 
     let footerBlock = "";
-    if (hasPrice || hasLink) {
+    if (hasPrice || hasLink || true) {
       footerBlock = `
-                <div class="card-footer ${!hasPrice ? "no-price" : ""}">
-                    ${hasPrice ? `<span class="card-price">${escapeHTML(item.price)}</span>` : ""}
-                    ${
-                      hasLink
-                        ? `<a href="${item.link}" target="_blank" rel="noopener noreferrer" class="card-btn">Ver Loja ↗</a>`
-                        : `<span class="card-btn card-btn--disabled">Só uma ideia 💭</span>`
-                    }
-                </div>
-            `;
+        <div class="card-footer ${!hasPrice ? "no-price" : ""}">
+          ${hasPrice ? `<span class="card-price">${escapeHTML(item.price)}</span>` : ""}
+          <div class="card-actions">
+            ${
+              hasLink && !reserved
+                ? `<a href="${escapeHTML(item.link)}" target="_blank" rel="noopener noreferrer" class="card-btn">Ver Loja ↗</a>`
+                : ""
+            }
+            <button onclick="toggleReservation(${item.id})" class="card-btn ${reserved ? "card-btn--reserved" : "card-btn--reserve"}">
+              ${reserved ? "✓ Reservado" : "Reservar"}
+            </button>
+          </div>
+        </div>
+      `;
     }
 
     return `
-            <article class="card ${!hasImage ? "card--no-image" : ""}">
-                ${mediaBlock}
-                <div class="card-content">
-                    <div class="card-header">
-                        <h2 class="card-title">${escapeHTML(item.title)}</h2>
-                        ${getPriorityBadge(item.priority)}
-                    </div>
-                    ${hasDescription ? `<p class="card-desc">${escapeHTML(item.description)}</p>` : ""}
-                    ${footerBlock}
-                </div>
-            </article>
-        `;
+      <article class="card ${!hasImage ? "card--no-image" : ""} ${reserved ? "card--reserved" : ""}">
+        ${mediaBlock}
+        <div class="card-content">
+          <div class="card-header">
+            <h2 class="card-title">${escapeHTML(item.title)}</h2>
+            ${getPriorityBadge(item.priority)}
+          </div>
+          ${hasDescription ? `<p class="card-desc">${escapeHTML(item.description)}</p>` : ""}
+          ${footerBlock}
+        </div>
+      </article>
+    `;
   };
 
   const renderItems = () => {
     if (typeof wishlistData === "undefined" || !Array.isArray(wishlistData)) {
       grid.innerHTML =
-        '<p style="grid-column: 1/-1; text-align: center; font-size: 1.2rem;">⚠️ Failed to load wishlist. Please check data.js.</p>';
+        '<p style="grid-column: 1/-1; text-align: center; font-size: 1.2rem;">⚠️ Erro ao carregar a wishlist. Verifica o ficheiro data.js.</p>';
       return;
     }
 
     if (wishlistData.length === 0) {
       grid.innerHTML =
-        '<p style="grid-column: 1/-1; text-align: center;">🎁 Wishlist is empty. Add items to data.js!</p>';
+        '<p style="grid-column: 1/-1; text-align: center;">🎁 A wishlist está vazia. Adiciona itens no data.js!</p>';
       return;
     }
 
@@ -83,6 +123,8 @@ document.addEventListener("DOMContentLoaded", () => {
       .map((item, index) => renderCard(item, index))
       .join("");
   };
+
+  window.toggleReservation = toggleReservation;
 
   renderItems();
 });
