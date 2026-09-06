@@ -62,12 +62,12 @@ document.addEventListener("DOMContentLoaded", () => {
     let mediaBlock = "";
     if (hasImage) {
       mediaBlock = `
-        <div class="card-image-wrapper ${reserved ? "card-image-wrapper--reserved" : ""}">
-          <img src="${escapeHTML(item.image)}" alt="Foto de ${escapeHTML(item.title)}" class="card-image" loading="${index < 3 ? "eager" : "lazy"}" decoding="async">
-          ${tags.length ? `<div class="card-tags">${tags.map((t) => `<span class="tag">${escapeHTML(t)}</span>`).join("")}</div>` : ""}
-          ${reserved ? '<div class="reserved-overlay">RESERVADO</div>' : ""}
-        </div>
-      `;
+      <div class="card-image-wrapper ${reserved ? "card-image-wrapper--reserved" : ""}">
+        <img src="${escapeHTML(item.image)}" alt="Foto de ${escapeHTML(item.title)}" class="card-image" loading="${index < 3 ? "eager" : "lazy"}" decoding="async">
+        ${tags.length ? `<div class="card-tags">${tags.map((t) => `<span class="tag">${escapeHTML(t)}</span>`).join("")}</div>` : ""}
+        ${reserved ? '<div class="reserved-overlay">RESERVADO</div>' : ""}
+      </div>
+    `;
     } else if (tags.length) {
       mediaBlock = `<div class="card-tags-top">${tags.map((t) => `<span class="tag">${escapeHTML(t)}</span>`).join("")}</div>`;
     }
@@ -75,35 +75,35 @@ document.addEventListener("DOMContentLoaded", () => {
     let footerBlock = "";
     if (hasPrice || hasLink || true) {
       footerBlock = `
-        <div class="card-footer ${!hasPrice ? "no-price" : ""}">
-          ${hasPrice ? `<span class="card-price">${escapeHTML(item.price)}</span>` : ""}
-          <div class="card-actions">
-            ${
-              hasLink && !reserved
-                ? `<a href="${escapeHTML(item.link)}" target="_blank" rel="noopener noreferrer" class="card-btn">Ver Loja ↗</a>`
-                : ""
-            }
-            <button onclick="toggleReservation(${item.id})" class="card-btn ${reserved ? "card-btn--reserved" : "card-btn--reserve"}">
-              ${reserved ? "✓ Reservado" : "Reservar"}
-            </button>
-          </div>
+      <div class="card-footer ${!hasPrice ? "no-price" : ""}">
+        ${hasPrice ? `<span class="card-price">${escapeHTML(item.price)}</span>` : ""}
+        <div class="card-actions">
+          ${
+            hasLink && !reserved
+              ? `<a href="${escapeHTML(item.link)}" target="_blank" rel="noopener noreferrer" class="card-btn">Ver Loja ↗</a>`
+              : ""
+          }
+          <button onclick="toggleReservation(${item.id})" class="card-btn ${reserved ? "card-btn--reserved" : "card-btn--reserve"}">
+            ${reserved ? "✓ Reservado" : "Reservar"}
+          </button>
         </div>
-      `;
+      </div>
+    `;
     }
 
     return `
-      <article class="card ${!hasImage ? "card--no-image" : ""} ${reserved ? "card--reserved" : ""}">
-        ${mediaBlock}
-        <div class="card-content">
-          <div class="card-header">
-            <h2 class="card-title">${escapeHTML(item.title)}</h2>
-            ${getPriorityBadge(item.priority)}
-          </div>
-          ${hasDescription ? `<p class="card-desc">${escapeHTML(item.description)}</p>` : ""}
-          ${footerBlock}
+    <article class="card ${!hasImage ? "card--no-image" : ""} ${reserved ? "card--reserved" : ""}" style="--card-index: ${index}">
+      ${mediaBlock}
+      <div class="card-content">
+        <div class="card-header">
+          <h2 class="card-title">${escapeHTML(item.title)}</h2>
+          ${getPriorityBadge(item.priority)}
         </div>
-      </article>
-    `;
+        ${hasDescription ? `<p class="card-desc">${escapeHTML(item.description)}</p>` : ""}
+        ${footerBlock}
+      </div>
+    </article>
+  `;
   };
 
   const renderItems = () => {
