@@ -6,7 +6,7 @@ const wishlistData = [
     image: "./images/et.jpeg",
     link: "https://exemplo.com/teclado",
     price: "150€",
-    priority: "high",
+    priority: "high", // high, medium, lows
     tags: ["Tech", "Hobby"],
   },
   {

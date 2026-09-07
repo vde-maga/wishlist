@@ -1,0 +1,26 @@
+/* Reset and CSS Variables */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+:root {
+  --bg-color: #f4f1ea;
+  --text-color: #1a1a1a;
+  --accent-color: #f36;
+  --accent-alt: #0c8;
+  --border-width: 3px;
+  --card-bg: #fff;
+  --shadow-color: var(--text-color);
+  --font-mono: "Space Mono", monospace;
+  --font-serif: "Playfair Display", serif;
+  --shadow-hard: 8px 8px 0 var(--shadow-color);
+  --shadow-hover: 12px 12px 0 var(--shadow-color);
+}
+body {
+  overflow-x: hidden;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-mono);
+  line-height: 1.6;
+}

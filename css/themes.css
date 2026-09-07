@@ -1,0 +1,53 @@
+/* Theme Management - Dark Mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #1a1a1a;
+    --text-color: #f4f1ea;
+    --accent-color: #ff4d7a;
+    --accent-alt: #00e6a0;
+    --card-bg: #2a2a2a;
+    --shadow-color: #000;
+  }
+}
+body.dark-mode {
+  --bg-color: #1a1a1a;
+  --text-color: #f4f1ea;
+  --accent-color: #ff4d7a;
+  --accent-alt: #00e6a0;
+  --card-bg: #2a2a2a;
+  --shadow-color: #000;
+}
+body.light-mode {
+  --bg-color: #f4f1ea;
+  --text-color: #1a1a1a;
+  --accent-color: #f36;
+  --accent-alt: #0c8;
+  --card-bg: #fff;
+  --shadow-color: #1a1a1a;
+}
+.theme-toggle {
+  position: fixed;
+  right: 2rem;
+  bottom: 2rem;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  height: 60px;
+  border: 3px solid var(--text-color);
+  border-radius: 50%;
+  background: var(--card-bg);
+  font-size: 1.8rem;
+  box-shadow: 4px 4px 0 var(--shadow-color);
+  transition: all .2s ease;
+  cursor: pointer;
+}
+.theme-toggle:hover {
+  box-shadow: 6px 6px 0 var(--shadow-color);
+  transform: translate(-2px, -2px);
+}
+.theme-toggle:active {
+  box-shadow: 2px 2px 0 var(--shadow-color);
+  transform: translate(2px, 2px);
+}
