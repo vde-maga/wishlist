@@ -52,4 +52,13 @@ const wishlistData = [
     tags: ["Hobby", "Tech", "Anime", "Cinema"],
     price: "3$/mo",
   },
+  {
+    id: 6,
+    title: "Plush do Tux, o Pinguim do Linux",
+    description:
+      "Gosto de Pinguins e Gosto do Linux, portanto, claro que gosto do Tux. Não precisa ser um plush. Eu apenas gostava de ter algo com o Pinguim!",
+    image: "./images/plush-linux-penguin.jpg",
+    priority: "medium", // high, medium, low
+    tags: ["Plush", "Tech"],
+  },
 ];
