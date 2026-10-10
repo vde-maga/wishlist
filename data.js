@@ -61,4 +61,12 @@ const wishlistData = [
     priority: "medium", // high, medium, low
     tags: ["Plush", "Tech"],
   },
+  {
+    id: 7,
+    title: "PSVita ou outra retro console portatil porreira",
+    description:
+      "Não gosto de jogar no telemóvel, pois não sinto os botões, no touchscreen. Acho que ao ter isto, seria mais gamer",
+    priority: "low",
+    tags: ["Tech", "Gaming"],
+  },
 ];
