@@ -69,4 +69,12 @@ const wishlistData = [
     priority: "low",
     tags: ["Tech", "Gaming"],
   },
-];
+  {
+    id: 8,
+    title: "Parafusos de HDD/SSDs",
+    description:
+      "Os parafusos que usamos para prender os discos rígidos ou SSDs às caixas dos computadores. São parafusos M3 ou #6-32 UNC. Existe uns packs de +500 parafusos diversos!",
+    priority: "low",
+    tags: ["Tech", "Hobby"],
+  },
+]; 
