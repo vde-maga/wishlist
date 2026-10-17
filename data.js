@@ -67,6 +67,7 @@ const wishlistData = [
     description:
       "Não gosto de jogar no telemóvel, pois não sinto os botões, no touchscreen. Acho que ao ter isto, seria mais gamer",
     priority: "low",
+	image: "./images/psvita.png",
     tags: ["Tech", "Gaming"],
   },
   {
@@ -75,6 +76,7 @@ const wishlistData = [
     description:
       "Os parafusos que usamos para prender os discos rígidos ou SSDs às caixas dos computadores. São parafusos M3 ou #6-32 UNC. Existe uns packs de +500 parafusos diversos!",
     priority: "low",
+	image: "./images/parafusos-hdd-ssd.jpg",
     tags: ["Tech", "Hobby"],
   },
 ]; 
