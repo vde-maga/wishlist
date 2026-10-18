@@ -67,7 +67,7 @@ const wishlistData = [
     description:
       "Não gosto de jogar no telemóvel, pois não sinto os botões, no touchscreen. Acho que ao ter isto, seria mais gamer",
     priority: "low",
-	image: "./images/psvita.webp",
+    image: "./images/psvita.webp",
     tags: ["Tech", "Gaming"],
   },
   {
@@ -76,7 +76,16 @@ const wishlistData = [
     description:
       "Os parafusos que usamos para prender os discos rígidos ou SSDs às caixas dos computadores. São parafusos M3 ou #6-32 UNC. Existe uns packs de +500 parafusos diversos!",
     priority: "low",
-	image: "./images/parafusos-hdd-ssd.webp",
+    image: "./images/parafusos-hdd-ssd.webp",
     tags: ["Tech", "Hobby"],
   },
-]; 
+  {
+    id: 9,
+    title: "Casaco M65",
+    description:
+      "É o casaco do James Sunderland e do Travis Bickle. É mais que um casaco. É um símbolo da solidão, dureza das ruas e outras coisas todas existencialistas e niilistas. Adorava ter um, pois acho que se encaixa bem com o que sou",
+    priority: "medium",
+    image: "./images/m65Casaco.webp",
+    tags: ["Roupa"],
+  },
+];
