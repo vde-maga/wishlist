@@ -4,7 +4,7 @@ const wishlistData = [
     title: "Discos Rígidos",
     description:
       "Quero criar uma NAS porreira e desde que os meus Barracudas morreram, estou aberto a recomeçar um hobbie meu",
-    image: "./images/barracuda.jpg",
+    image: "./images/barracuda.webp",
     link: "https://diskprices.com/",
     priority: "medium", // high, medium, low
     tags: ["Tech", "Hobby"],
@@ -57,7 +57,7 @@ const wishlistData = [
     title: "Plush do Tux, o Pinguim do Linux",
     description:
       "Gosto de Pinguins e Gosto do Linux, portanto, claro que gosto do Tux. Não precisa ser um plush. Eu apenas gostava de ter algo com o Pinguim!",
-    image: "./images/plush-linux-penguin.jpg",
+    image: "./images/plush-linux-penguin.webp",
     priority: "medium", // high, medium, low
     tags: ["Plush", "Tech"],
   },
@@ -67,7 +67,7 @@ const wishlistData = [
     description:
       "Não gosto de jogar no telemóvel, pois não sinto os botões, no touchscreen. Acho que ao ter isto, seria mais gamer",
     priority: "low",
-	image: "./images/psvita.png",
+	image: "./images/psvita.webp",
     tags: ["Tech", "Gaming"],
   },
   {
@@ -76,7 +76,7 @@ const wishlistData = [
     description:
       "Os parafusos que usamos para prender os discos rígidos ou SSDs às caixas dos computadores. São parafusos M3 ou #6-32 UNC. Existe uns packs de +500 parafusos diversos!",
     priority: "low",
-	image: "./images/parafusos-hdd-ssd.jpg",
+	image: "./images/parafusos-hdd-ssd.webp",
     tags: ["Tech", "Hobby"],
   },
 ]; 
