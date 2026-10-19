@@ -1,13 +1,10 @@
 // Filter system - manages all filtering and sorting logic
 
-import { isReserved } from "./reservation.js";
-
 // Filter state
 let activeFilters = {
   tags: [],
   priority: null,
   priceRange: null,
-  reserved: null,
 };
 
 let sortOrder = null; // 'price-asc' or 'price-desc'
@@ -63,14 +60,6 @@ export const applyFilters = (data) => {
     });
   }
 
-  // Filter by reservation status
-  if (activeFilters.reserved !== null) {
-    filtered = filtered.filter((item) => {
-      const reserved = isReserved(item.id);
-      return activeFilters.reserved === "reserved" ? reserved : !reserved;
-    });
-  }
-
   // Sort by price
   if (sortOrder) {
     filtered.sort((a, b) => {
@@ -104,11 +93,6 @@ export const setPriceRangeFilter = (range) => {
   activeFilters.priceRange = activeFilters.priceRange === range ? null : range;
 };
 
-// Set reservation filter
-export const setReservedFilter = (status) => {
-  activeFilters.reserved = activeFilters.reserved === status ? null : status;
-};
-
 // Set sort order
 export const setSortOrder = (order) => {
   sortOrder = sortOrder === order ? null : order;
@@ -120,7 +104,6 @@ export const resetFilters = () => {
     tags: [],
     priority: null,
     priceRange: null,
-    reserved: null,
   };
   sortOrder = null;
 };

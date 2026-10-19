@@ -1,23 +1,15 @@
 // Main application - entry point and initialization
 
 import { initTheme } from "./theme.js";
-import { toggleReservation } from "./reservation.js";
 import { renderItems, renderFilters, updateFilterButtons } from "./renderer.js";
 import {
   toggleTagFilter,
   setPriorityFilter,
   setPriceRangeFilter,
-  setReservedFilter,
   setSortOrder,
   resetFilters,
   applyFilters,
 } from "./filters.js";
-
-// Make toggleReservation globally accessible for onclick handlers
-window.handleReservation = (id) => {
-  toggleReservation(id);
-  refreshWishlist();
-};
 
 const refreshWishlist = () => {
   const grid = document.getElementById("wishlist-grid");
@@ -69,8 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
       setPriceRangeFilter(value);
     } else if (filter === "sort") {
       setSortOrder(value);
-    } else if (filter === "reserved") {
-      setReservedFilter(value);
     }
 
     refreshWishlist();

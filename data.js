@@ -88,4 +88,12 @@ const wishlistData = [
     image: "./images/m65Casaco.webp",
     tags: ["Roupa"],
   },
+  {
+    id: 10,
+    title: "Google Chromecast",
+    description:
+      "Eu não consigo dormir sem ver um vídeo do youtube... O meu método antigo morreu... Preciso de um novo",
+    priority: "medium",
+    tags: ["Tech"],
+  },
 ];

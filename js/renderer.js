@@ -1,7 +1,6 @@
 // Card rendering and filter UI - handles all DOM manipulation
 
 import { escapeHTML } from "./utils.js";
-import { isReserved } from "./reservation.js";
 import { getUniqueTags, getFilterState } from "./filters.js";
 
 const getPriorityBadge = (priority) => {
@@ -20,15 +19,13 @@ const renderCard = (item, index) => {
   const hasPrice = !!item.price;
   const hasLink = !!item.link;
   const hasDescription = !!item.description;
-  const reserved = isReserved(item.id);
 
   let mediaBlock = "";
   if (hasImage) {
     mediaBlock = `
-      <div class="card-image-wrapper ${reserved ? "card-image-wrapper--reserved" : ""}">
+      <div class="card-image-wrapper">
         <img src="${escapeHTML(item.image)}" alt="Foto de ${escapeHTML(item.title)}" class="card-image" loading="${index < 3 ? "eager" : "lazy"}" decoding="async">
         ${tags.length ? `<div class="card-tags">${tags.map((t) => `<span class="tag">${escapeHTML(t)}</span>`).join("")}</div>` : ""}
-        ${reserved ? '<div class="reserved-overlay">RESERVADO</div>' : ""}
       </div>
     `;
   } else if (tags.length) {
@@ -40,19 +37,16 @@ const renderCard = (item, index) => {
       ${hasPrice ? `<span class="card-price">${escapeHTML(item.price)}</span>` : ""}
       <div class="card-actions">
         ${
-          hasLink && !reserved
+          hasLink
             ? `<a href="${escapeHTML(item.link)}" target="_blank" rel="noopener noreferrer" class="card-btn">Ver Loja ↗</a>`
             : ""
         }
-        <button onclick="window.handleReservation(${item.id})" class="card-btn ${reserved ? "card-btn--reserved" : "card-btn--reserve"}">
-          ${reserved ? "✓ Reservado" : "Reservar"}
-        </button>
       </div>
     </div>
   `;
 
   return `
-    <article class="card ${!hasImage ? "card--no-image" : ""} ${reserved ? "card--reserved" : ""}" style="--card-index: ${index}">
+    <article class="card ${!hasImage ? "card--no-image" : ""}" style="--card-index: ${index}">
       ${mediaBlock}
       <div class="card-content">
         <div class="card-header">
@@ -123,10 +117,8 @@ export const renderFilters = (container, data) => {
         </div>
       </div>
       <div class="filter-row">
-        <span class="filter-label">Estado</span>
+        <span class="filter-label">Ações</span>
         <div class="filter-buttons">
-          <button class="filter-btn" data-filter="reserved" data-value="available">Disponíveis</button>
-          <button class="filter-btn" data-filter="reserved" data-value="reserved">Reservados</button>
           <button class="filter-btn reset" id="reset-filters">Limpar</button>
         </div>
       </div>
@@ -155,7 +147,6 @@ export const updateFilterButtons = (container) => {
     else if (filter === "priority") isActive = state.priority === value;
     else if (filter === "price") isActive = state.priceRange === value;
     else if (filter === "sort") isActive = state.sortOrder === value;
-    else if (filter === "reserved") isActive = state.reserved === value;
 
     btn.classList.toggle("active", isActive);
   });
