@@ -1,5 +1,6 @@
 // Main application - entry point and initialization
 
+import { wishlistData } from "../data.js";
 import { initTheme } from "./theme.js";
 import { renderItems, renderFilters, updateFilterButtons } from "./renderer.js";
 import {
@@ -9,39 +10,43 @@ import {
   setSortOrder,
   resetFilters,
   applyFilters,
+  hasActiveFilter,
 } from "./filters.js";
+
+const getData = () => (Array.isArray(wishlistData) ? wishlistData : []);
+
+const updateResultsCount = (resultsDiv, total, shown) => {
+  if (!resultsDiv) return;
+  resultsDiv.textContent =
+    shown === total
+      ? `A mostrar todos os ${total} itens`
+      : `A mostrar ${shown} de ${total} itens`;
+};
 
 const refreshWishlist = () => {
   const grid = document.getElementById("wishlist-grid");
   const filtersContainer = document.getElementById("filters-container");
+  const data = getData();
 
-  const filteredData = applyFilters(wishlistData);
-  renderItems(grid, filteredData);
+  const filteredData = applyFilters(data);
+  renderItems(grid, filteredData, { hasFilter: hasActiveFilter() });
   updateFilterButtons(filtersContainer);
 
-  // Update results count
   const resultsDiv = document.getElementById("filter-results");
-  if (resultsDiv) {
-    const total = wishlistData.length;
-    const shown = filteredData.length;
-    resultsDiv.textContent =
-      shown === total
-        ? `A mostrar todos os ${total} itens`
-        : `A mostrar ${shown} de ${total} itens`;
-  }
+  updateResultsCount(resultsDiv, data.length, filteredData.length);
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  const grid = document.getElementById("wishlist-grid");
   const filtersContainer = document.getElementById("filters-container");
   const themeToggle = document.getElementById("theme-toggle");
   const themeIcon = document.getElementById("theme-icon");
+  const grid = document.getElementById("wishlist-grid");
 
   // Initialize theme
   initTheme(themeToggle, themeIcon);
 
   // Render filters
-  renderFilters(filtersContainer, wishlistData);
+  renderFilters(filtersContainer, getData());
 
   // Filter event listeners
   filtersContainer.addEventListener("click", (e) => {
@@ -51,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const filter = btn.dataset.filter;
     const value = btn.dataset.value;
 
-    if (btn.id === "reset-filters") {
+    if (btn.id === "reset-filters" || filter === "reset") {
       resetFilters();
     } else if (filter === "tag") {
       toggleTagFilter(value);
@@ -64,6 +69,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     refreshWishlist();
+  });
+
+  // "Limpar filtros" button shown inside the empty state
+  grid.addEventListener("click", (e) => {
+    if (e.target.closest(".grid-message-action")) {
+      resetFilters();
+      refreshWishlist();
+    }
   });
 
   // Initial render

@@ -1,0 +1,99 @@
+# A Minha Wishlist
+
+Página pessoal de wishlist / lista de prendas, estática e sem dependências
+de runtime. Feita com HTML, CSS e JavaScript (ES Modules) puros.
+
+**Live:** https://vde-maga.github.io/wishlist/
+
+## Estrutura
+
+```
+.
+├── index.html            # Página única (meta tags, layout, bootstrap de tema)
+├── data.js               # Conteúdo da wishlist (ES module: wishlistData)
+├── robots.txt            # Regras de indexação
+├── sitemap.xml           # Sitemap
+├── css/                  # CSS modular (reset → layout → components → …)
+├── js/                   # Módulos ES
+│   ├── app.js            # Entry point / wiring de eventos
+│   ├── renderer.js       # Render de cards e painel de filtros
+│   ├── filters.js        # Estado e lógica de filtragem/ordenação
+│   ├── theme.js          # Tema claro/escuro
+│   ├── storage.js        # Persistência (localStorage)
+│   └── utils.js          # Funções puras (escape, parse de preço, URL)
+├── images/               # Imagens otimizadas (.webp)
+└── scripts/
+    └── optimize-images.sh  # Pipeline de otimização de imagens (ImageMagick)
+```
+
+## Adicionar um item
+
+Edita `data.js` e acrescenta uma entrada ao array `wishlistData`:
+
+```js
+{
+  id: 11,
+  title: "Nome do item",
+  description: "Porquê que o quero...",
+  image: "./images/ficheiro.webp",   // opcional
+  link: "https://loja.exemplo/item", // opcional
+  priority: "medium",                // high | medium | low (default: medium)
+  tags: ["Tech", "Hobby"],           // opcional
+  price: "38€",                      // opcional
+}
+```
+
+Campos são todos opcionais exceto `id` e `title`. O parsing de preço aceita
+valores simples (`38€`), intervalos (`1 a 10€`) e sufixos não-EUR (`3$/mo`).
+
+## Filtrar
+
+- **Tags** — multi-seleção (lógica OR)
+- **Prioridade** — alta / média / baixa
+- **Preço** — `€` (até 50€), `€€` (50–150€), `€€€` (150€+)
+- **Ordenar** — por preço ascendente/descendente
+
+Itens sem preço definido nunca são escondidos pelos filtros de preço e são
+colocados no fim quando se ordena por preço.
+
+Em ecrãs pequenos (< 768px) o painel de filtros aparece colapsado por defeito
+para poupar espaço vertical.
+
+## Desenvolvimento
+
+Sem build step. Basta servir a raiz por HTTP:
+
+```sh
+python3 -m http.server 8000
+# ou
+npx serve .
+```
+
+### Otimização de imagens (Nix + ImageMagick)
+
+```sh
+nix develop          # shell com ImageMagick
+nix run .#optimize   # corre scripts/optimize-images.sh
+```
+
+Flags do script: `--check` (só reporta), `--all` (recomprime tudo),
+`--keep-originals`.
+
+### Qualidade de código
+
+```sh
+npm install     # instala ESLint + Prettier (devDependencies)
+npm run lint    # ESLint
+npm run format  # Prettier (escreve)
+```
+
+O CI (`.github/workflows/ci.yml`) corre o lint em cada push/PR.
+
+## Deploy
+
+GitHub Pages a servir a branch `main`. Faz merge de `dev` → `main` para
+publicar.
+
+## Licença
+
+MIT — ver [LICENSE](./LICENSE).

@@ -17,13 +17,21 @@
     transform: translateY(0) scale(1);
   }
 }
-.card {
+
+/* Only animate cards once JS marks the document as enhanced, so that
+   content stays visible without JS (no-JS users / crawlers). */
+.js .card {
   opacity: 0;
   animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   animation-delay: calc(var(--card-index, 0) * 80ms);
 }
+
+/* Marquee is decorative; pause it for users who reduce motion. */
 @media (prefers-reduced-motion: reduce) {
-  .card {
+  .marquee-track {
+    animation: none;
+  }
+  .js .card {
     opacity: 1;
     transform: none;
     animation: none;

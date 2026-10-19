@@ -1,0 +1,20 @@
+{
+  "name": "wishlist",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Página pessoal de wishlist estática (HTML/CSS/JS puros)",
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check:js": "node --check data.js && node --check js/app.js && node --check js/filters.js && node --check js/renderer.js && node --check js/storage.js && node --check js/theme.js && node --check js/utils.js"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.0.0",
+    "globals": "^15.0.0",
+    "prettier": "^3.0.0"
+  }
+}

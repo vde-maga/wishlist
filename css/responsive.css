@@ -1,21 +1,82 @@
 /* Responsive Design */
+
+/* Touch devices: disable hover lift on cards to avoid sticky hover states */
+@media (hover: none) {
+  .card:hover {
+    box-shadow: var(--shadow-hard);
+    transform: none;
+  }
+  .card:hover .card-image {
+    transform: none;
+    filter: grayscale(20%);
+  }
+}
+
 @media (max-width: 768px) {
   .container {
     padding: 2rem 1rem;
   }
   .grid-container {
-    gap: 2rem;
+    gap: 1.75rem;
     grid-template-columns: 1fr;
   }
-  .card:hover {
-    box-shadow: var(--shadow-hard);
-    transform: none;
+  .intro {
+    margin-bottom: 2.5rem;
   }
+  .title-massive {
+    font-size: clamp(2.4rem, 13vw, 4rem);
+  }
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  /* Filters: stack labels above their button groups and enlarge tap targets */
+  .filters-container {
+    padding: 0.9rem 1rem;
+    box-shadow: 5px 5px 0 var(--shadow-color);
+  }
+  .filters-toggle {
+    margin-bottom: 0.5rem;
+    padding: 0.25rem 0;
+    min-height: 44px;
+  }
+  .filter-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.4rem;
+  }
+  .filter-label {
+    font-size: 0.7rem;
+    min-width: 0;
+  }
+  .filter-buttons {
+    gap: 0.5rem;
+  }
+  .filter-btn {
+    flex: 0 1 auto;
+    min-height: 44px;
+    padding: 0.5rem 0.8rem;
+    font-size: 0.72rem;
+  }
+  .filter-btn.reset {
+    margin-left: 0;
+  }
+
   .theme-toggle {
     right: 1rem;
     bottom: 1rem;
-    width: 50px;
-    height: 50px;
+    width: 52px;
+    height: 52px;
     font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .card-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .card-title {
+    font-size: 1.35rem;
   }
 }

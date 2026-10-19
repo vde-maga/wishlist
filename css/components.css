@@ -25,6 +25,7 @@
   overflow: hidden;
   width: 100%;
   height: 250px;
+  background: var(--image-bg);
   border-bottom: var(--border-width) solid var(--text-color);
 }
 .card-image {
@@ -59,7 +60,7 @@
 .card-desc {
   flex-grow: 1;
   margin-bottom: 1.5rem;
-  opacity: 0.8;
+  opacity: 0.9;
   font-size: 0.9rem;
 }
 .card-footer {
@@ -91,20 +92,7 @@
 .card-btn:hover {
   border-color: var(--accent-color);
   background: var(--accent-color);
-  color: #fff;
-}
-.card-btn--disabled {
-  border: 2px dashed var(--text-color);
-  background: transparent;
-  color: var(--text-color);
-  opacity: 0.7;
-  font-style: italic;
-  cursor: default;
-}
-.card-btn--disabled:hover {
-  background: transparent;
-  color: var(--text-color);
-  transform: none;
+  color: var(--on-accent);
 }
 .card-actions {
   display: flex;
@@ -127,7 +115,8 @@
 .tag {
   padding: 2px 8px;
   border: 2px solid var(--text-color);
-  background: var(--bg-color);
+  background: var(--card-bg);
+  box-shadow: 2px 2px 0 var(--text-color);
   font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -141,12 +130,12 @@
   white-space: nowrap;
 }
 .badge-high {
-  background: var(--accent-color);
+  background: var(--accent-strong);
   color: #fff;
 }
 .badge-medium {
   background: var(--accent-alt);
-  color: var(--text-color);
+  color: var(--badge-alt-text);
 }
 .badge-low {
   background: var(--bg-color);
@@ -169,6 +158,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
   cursor: pointer;
   user-select: none;
   margin-bottom: 0.75rem;
@@ -253,7 +249,7 @@
 }
 
 .filter-btn.active {
-  background: var(--accent-color);
+  background: var(--accent-strong);
   color: #fff;
   border-color: var(--text-color);
 }
@@ -266,33 +262,50 @@
 }
 
 .filter-btn.reset:hover {
-  background: var(--accent-color);
+  background: var(--accent-strong);
   color: #fff;
   border-style: solid;
 }
 
 .filter-results {
+  justify-self: center;
+  margin-top: 0.5rem;
+  padding: 0.35rem 0.9rem;
+  border: 2px solid var(--text-color);
+  background: var(--card-bg);
+  box-shadow: 3px 3px 0 var(--text-color);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  margin-top: 0.75rem;
-  padding-top: 0.75rem;
-  border-top: 2px dashed var(--text-color);
-  opacity: 0.7;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   text-align: center;
 }
 
-@media (max-width: 768px) {
-  .filters-container {
-    padding: 0.75rem 1rem;
-  }
+.grid-message {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 4rem 1rem;
+  text-align: center;
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
 
-  .filter-btn {
-    font-size: 0.65rem;
-    padding: 0.3rem 0.6rem;
-  }
+.grid-message-icon {
+  font-size: 3.5rem;
+  line-height: 1;
+}
 
-  .filter-label {
-    font-size: 0.7rem;
-    min-width: 50px;
-  }
+.grid-message code {
+  padding: 1px 6px;
+  border: 2px solid var(--text-color);
+  background: var(--card-bg);
+  font-size: 0.9em;
+}
+
+.grid-message-action {
+  margin: 0.5rem 0 0;
 }

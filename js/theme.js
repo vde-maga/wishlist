@@ -8,39 +8,46 @@ const getSystemTheme = () => {
     : "light";
 };
 
-const applyTheme = (theme, themeIcon) => {
+const applyTheme = (theme, themeToggle, themeIcon) => {
+  const isDark = theme === "dark";
   document.body.classList.remove("dark-mode", "light-mode");
+  document.body.classList.add(isDark ? "dark-mode" : "light-mode");
+  document.documentElement.dataset.theme = theme;
 
-  if (theme === "dark") {
-    document.body.classList.add("dark-mode");
-    themeIcon.textContent = "☀️";
-  } else {
-    document.body.classList.add("light-mode");
-    themeIcon.textContent = "🌙";
+  if (themeIcon) {
+    themeIcon.textContent = isDark ? "☀️" : "🌙";
+  }
+  if (themeToggle) {
+    themeToggle.setAttribute("aria-pressed", String(isDark));
+    themeToggle.setAttribute(
+      "aria-label",
+      isDark ? "Mudar para tema claro" : "Mudar para tema escuro",
+    );
   }
 };
 
 export const initTheme = (themeToggle, themeIcon) => {
   const storedTheme = storage.getTheme();
   const theme = storedTheme || getSystemTheme();
-  applyTheme(theme, themeIcon);
+  applyTheme(theme, themeToggle, themeIcon);
 
-  themeToggle.addEventListener("click", () => {
-    const currentTheme = document.body.classList.contains("dark-mode")
-      ? "dark"
-      : "light";
-    const newTheme = currentTheme === "dark" ? "light" : "dark";
-    applyTheme(newTheme, themeIcon);
-    storage.setTheme(newTheme);
-  });
+  if (themeToggle) {
+    themeToggle.addEventListener("click", () => {
+      const currentTheme = document.body.classList.contains("dark-mode")
+        ? "dark"
+        : "light";
+      const newTheme = currentTheme === "dark" ? "light" : "dark";
+      applyTheme(newTheme, themeToggle, themeIcon);
+      storage.setTheme(newTheme);
+    });
+  }
 
   // Listen for system theme changes
   window
     .matchMedia("(prefers-color-scheme: dark)")
     .addEventListener("change", (e) => {
-      const storedTheme = storage.getTheme();
-      if (!storedTheme) {
-        applyTheme(e.matches ? "dark" : "light", themeIcon);
+      if (!storage.getTheme()) {
+        applyTheme(e.matches ? "dark" : "light", themeToggle, themeIcon);
       }
     });
 };

@@ -10,8 +10,11 @@
       name="description"
       content="Uma coleção curada de desejos e ideias de prendas. Tecnologia, livros, decoração e experiências."
     />
-    <meta name="author" content="O Teu Nome" />
+    <meta name="author" content="Miraiy" />
     <meta name="theme-color" content="#f4f1ea" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://vde-maga.github.io/wishlist/" />
+    <link rel="sitemap" type="application/xml" href="/wishlist/sitemap.xml" />
 
     <!-- Open Graph / Facebook / WhatsApp / LinkedIn -->
     <meta property="og:type" content="website" />
@@ -21,12 +24,10 @@
       property="og:description"
       content="Uma coleção curada de desejos e ideias de prendas. Clica para veres onde comprar."
     />
-    <meta
-      property="og:image"
-      content="https://vde-maga.github.io/wishlist/images/og-image.webp"
-    />
+    <meta property="og:image" content="https://vde-maga.github.io/wishlist/images/og-image.webp" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="A Minha Wishlist - Ideias de Prendas" />
     <meta property="og:locale" content="pt_PT" />
 
     <!-- Twitter Card -->
@@ -37,10 +38,8 @@
       name="twitter:description"
       content="Uma coleção curada de desejos e ideias de prendas. Clica para veres onde comprar."
     />
-    <meta
-      name="twitter:image"
-      content="https://vde-maga.github.io/wishlist/images/og-image.webp"
-    />
+    <meta name="twitter:image" content="https://vde-maga.github.io/wishlist/images/og-image.webp" />
+    <meta name="twitter:image:alt" content="A Minha Wishlist - Ideias de Prendas" />
 
     <!-- Favicon SVG Inline -->
     <link
@@ -64,50 +63,69 @@
     <link rel="stylesheet" href="css/animations.css" />
     <link rel="stylesheet" href="css/themes.css" />
     <link rel="stylesheet" href="css/responsive.css" />
+
+    <!-- Anti-flash: apply stored/system theme before first paint -->
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("wishlist_theme");
+          var theme =
+            stored ||
+            (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+          document.documentElement.classList.add("js");
+          document.documentElement.dataset.theme = theme;
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
-    <header class="header-marquee">
+    <a class="skip-link" href="#main-content">Saltar para o conteúdo</a>
+    <header class="header-marquee" aria-hidden="true">
       <div class="marquee-track">
         <span
-          >WISHLIST DO MIRAIY - IDEIAS DE PRENDAS - ADORO PRENDAS - WISHLIST DO
-          MIRAIY - IDEIAS DE PRENDAS - ADORO PRENDAS -
+          >WISHLIST DO MIRAIY - IDEIAS DE PRENDAS - ADORO PRENDAS - WISHLIST DO MIRAIY - IDEIAS DE
+          PRENDAS - ADORO PRENDAS -
         </span>
         <span
-          >WISHLIST DO MIRAIY - IDEIAS DE PRENDAS - ADORO PRENDAS - WISHLIST DO
-          MIRAIY - IDEIAS DE PRENDAS - ADORO PRENDAS -
+          >WISHLIST DO MIRAIY - IDEIAS DE PRENDAS - ADORO PRENDAS - WISHLIST DO MIRAIY - IDEIAS DE
+          PRENDAS - ADORO PRENDAS -
         </span>
       </div>
     </header>
 
-    <main class="container">
+    <main class="container" id="main-content">
       <section class="intro">
         <h1 class="title-massive">Coisas<br /><em>que eu quero.</em></h1>
         <p class="subtitle">
-          Uma coleção de prendas que o Miraiy, eu, adoraria receber. Posso não
-          parecer feliz no momento, mas eu amarei a prenda!
+          Uma coleção de prendas que o Miraiy, eu, adoraria receber. Posso não parecer feliz no
+          momento, mas eu amarei a prenda!
         </p>
       </section>
 
       <section class="filters-container" id="filters-container"></section>
+      <noscript>
+        <p class="grid-message">
+          Esta wishlist precisa de JavaScript ativo para apresentar os itens.
+        </p>
+      </noscript>
       <section id="wishlist-grid" class="grid-container"></section>
     </main>
 
     <footer class="footer">
-      <p>Something nice to put in a footer - miraiy, 2026</p>
+      <p>Feito com carinho — Miraiy, 2026</p>
     </footer>
 
     <!-- Theme Toggle Button -->
     <button
       class="theme-toggle"
       id="theme-toggle"
+      type="button"
       aria-label="Alternar tema claro/escuro"
+      aria-pressed="false"
       title="Alternar tema"
     >
-      <span id="theme-icon">🌙</span>
+      <span id="theme-icon" aria-hidden="true">🌙</span>
     </button>
-
-    <!-- Data -->
-    <script src="data.js"></script>
 
     <!-- Modular JavaScript (ES6 Modules) -->
     <script type="module" src="js/app.js"></script>

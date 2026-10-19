@@ -1,5 +1,7 @@
 // Filter system - manages all filtering and sorting logic
 
+import { parsePrice, PRICE_TIERS } from "./utils.js";
+
 // Filter state
 let activeFilters = {
   tags: [],
@@ -40,32 +42,32 @@ export const applyFilters = (data) => {
     );
   }
 
-  // Filter by price range
+  // Filter by price range.
+  // Items without a valid price are always kept so that selecting a price
+  // tier never silently hides items that simply have no price set.
   if (activeFilters.priceRange) {
-    filtered = filtered.filter((item) => {
-      if (!item.price) return false;
-      const price = parseFloat(item.price.replace(/[^\d.]/g, ""));
-      if (isNaN(price)) return false;
-
-      switch (activeFilters.priceRange) {
-        case "low":
-          return price < 50;
-        case "medium":
-          return price >= 50 && price < 150;
-        case "high":
-          return price >= 150;
-        default:
-          return true;
-      }
-    });
+    const tier = PRICE_TIERS[activeFilters.priceRange];
+    if (tier) {
+      filtered = filtered.filter((item) => {
+        const price = parsePrice(item.price);
+        if (isNaN(price)) return true;
+        return tier(price);
+      });
+    }
   }
 
-  // Sort by price
+  // Sort by price. Items without a price are always pushed to the end.
   if (sortOrder) {
+    const direction = sortOrder === "price-asc" ? 1 : -1;
     filtered.sort((a, b) => {
-      const priceA = parseFloat((a.price || "0").replace(/[^\d.]/g, "")) || 0;
-      const priceB = parseFloat((b.price || "0").replace(/[^\d.]/g, "")) || 0;
-      return sortOrder === "price-asc" ? priceA - priceB : priceB - priceA;
+      const priceA = parsePrice(a.price);
+      const priceB = parsePrice(b.price);
+      const hasA = !isNaN(priceA);
+      const hasB = !isNaN(priceB);
+      if (!hasA && !hasB) return 0;
+      if (!hasA) return 1;
+      if (!hasB) return -1;
+      return (priceA - priceB) * direction;
     });
   }
 
@@ -113,3 +115,13 @@ export const getFilterState = () => ({
   ...activeFilters,
   sortOrder,
 });
+
+// Whether any filter or sort is currently active
+export const hasActiveFilter = () => {
+  return (
+    activeFilters.tags.length > 0 ||
+    activeFilters.priority !== null ||
+    activeFilters.priceRange !== null ||
+    sortOrder !== null
+  );
+};
