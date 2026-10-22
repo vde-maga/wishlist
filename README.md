@@ -17,7 +17,7 @@ de runtime. Feita com HTML, CSS e JavaScript (ES Modules) puros.
 ├── js/                   # Módulos ES
 │   ├── app.js            # Entry point / wiring de eventos
 │   ├── renderer.js       # Render de cards e painel de filtros
-│   ├── filters.js        # Estado e lógica de filtragem/ordenação
+│   ├── filters.js        # Filtragem, ordenação e estado no URL
 │   ├── theme.js          # Tema claro/escuro
 │   ├── storage.js        # Persistência (localStorage)
 │   └── utils.js          # Funções puras (escape, parse de preço, URL)
@@ -46,8 +46,10 @@ Edita `data.js` e acrescenta uma entrada ao array `wishlistData`:
 Campos são todos opcionais exceto `id` e `title`. O parsing de preço aceita
 valores simples (`38€`), intervalos (`1 a 10€`) e sufixos não-EUR (`3$/mo`).
 
-## Filtrar
+## Filtrar e pesquisar
 
+- **Pesquisa** — por título, descrição ou tags, sem distinguir maiúsculas nem
+  acentos. O atalho `/` foca o campo de pesquisa.
 - **Tags** — multi-seleção (lógica OR)
 - **Prioridade** — alta / média / baixa
 - **Preço** — `€` (até 50€), `€€` (50–150€), `€€€` (150€+)
@@ -56,8 +58,18 @@ valores simples (`38€`), intervalos (`1 a 10€`) e sufixos não-EUR (`3$/mo`)
 Itens sem preço definido nunca são escondidos pelos filtros de preço e são
 colocados no fim quando se ordena por preço.
 
+A pesquisa e os filtros são guardados na query string (por exemplo,
+`?q=teclado&tags=Tech`). O URL pode ser guardado ou partilhado e o estado é
+restaurado ao abrir a página.
+
 Em ecrãs pequenos (< 768px) o painel de filtros aparece colapsado por defeito
 para poupar espaço vertical.
+
+## Partilhar um item
+
+Cada card tem um link direto (`#item-12`) e um botão **Partilhar**. Em
+dispositivos com Web Share API abre o menu nativo; nos restantes copia o link
+para a área de transferência.
 
 ## Desenvolvimento
 

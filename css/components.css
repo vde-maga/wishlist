@@ -6,9 +6,14 @@
   border: var(--border-width) solid var(--text-color);
   background: var(--card-bg);
   box-shadow: var(--shadow-hard);
+  scroll-margin-top: 1.5rem;
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
+}
+.card:target {
+  outline: 4px solid var(--accent-color);
+  outline-offset: 4px;
 }
 .card--no-image {
   border-top: 8px solid var(--accent-color);
@@ -84,9 +89,11 @@
   border: 2px solid var(--text-color);
   background: var(--text-color);
   color: var(--bg-color);
+  font-family: inherit;
   font-size: 0.8rem;
   font-weight: 700;
   text-decoration: none;
+  cursor: pointer;
   transition: all 0.2s;
 }
 .card-btn:hover {
@@ -181,6 +188,30 @@
 .filters-toggle-icon {
   font-size: 1.2rem;
   transition: transform 0.3s ease;
+}
+
+.filters-search {
+  margin-bottom: 0.75rem;
+}
+
+.filters-search-input {
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  border: 2px solid var(--text-color);
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+.filters-search-input::placeholder {
+  color: var(--text-color);
+  opacity: 0.55;
+}
+
+.filters-search-input:focus-visible {
+  outline: 3px solid var(--accent-color);
+  outline-offset: 2px;
 }
 
 .filters-container.collapsed .filters-toggle-icon {

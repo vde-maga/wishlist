@@ -10,6 +10,15 @@ export const escapeHTML = (str) => {
     .replace(/'/g, "&#39;");
 };
 
+// Normalize text for accent-insensitive, case-insensitive search.
+export const normalizeText = (value) => {
+  if (value === null || value === undefined) return "";
+  return String(value)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+};
+
 // Parse a price string into a number.
 // Handles ranges ("1 a 10€" -> 1), single values ("38€" -> 38)
 // and non-EUR suffixes ("3$/mo" -> 3). Returns NaN when unparseable.

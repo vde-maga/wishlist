@@ -8,12 +8,73 @@ import {
   setPriorityFilter,
   setPriceRangeFilter,
   setSortOrder,
+  setSearchQuery,
   resetFilters,
   applyFilters,
   hasActiveFilter,
+  hydrateFiltersFromURL,
+  syncFiltersToURL,
 } from "./filters.js";
 
 const getData = () => (Array.isArray(wishlistData) ? wishlistData : []);
+
+const copyText = async (text) => {
+  if (navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return;
+    } catch {
+      // Fall back to the legacy path below when clipboard access is denied.
+    }
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.setAttribute("readonly", "");
+  textarea.style.position = "fixed";
+  textarea.style.opacity = "0";
+  document.body.appendChild(textarea);
+  textarea.select();
+
+  try {
+    if (!document.execCommand("copy")) {
+      throw new Error("Copy command failed");
+    }
+  } finally {
+    textarea.remove();
+  }
+};
+
+const shareItem = async (button) => {
+  const card = button.closest(".card");
+  const title =
+    card?.querySelector(".card-title")?.textContent?.trim() || document.title;
+  const url = new URL(window.location.href);
+  url.hash = `item-${button.dataset.shareId}`;
+  url.search = "";
+
+  if (navigator.share) {
+    try {
+      await navigator.share({ title, text: title, url: url.toString() });
+      return;
+    } catch (error) {
+      if (error?.name === "AbortError") return;
+    }
+  }
+
+  const originalText = button.textContent;
+  try {
+    await copyText(url.toString());
+    button.textContent = "Copiado!";
+  } catch (error) {
+    console.error("Error copying item link:", error);
+    button.textContent = "Erro ao copiar";
+  }
+
+  window.setTimeout(() => {
+    button.textContent = originalText;
+  }, 1600);
+};
 
 const updateResultsCount = (resultsDiv, total, shown) => {
   if (!resultsDiv) return;
@@ -34,6 +95,25 @@ const refreshWishlist = () => {
 
   const resultsDiv = document.getElementById("filter-results");
   updateResultsCount(resultsDiv, data.length, filteredData.length);
+  syncFiltersToURL();
+};
+
+// Cards are rendered after the initial parse, so scroll to deep links manually.
+const scrollToHash = () => {
+  if (!window.location.hash) return;
+
+  let target;
+  try {
+    target = document.getElementById(
+      decodeURIComponent(window.location.hash.slice(1)),
+    );
+  } catch {
+    return;
+  }
+
+  window.requestAnimationFrame(() => {
+    target?.scrollIntoView({ block: "start" });
+  });
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -42,11 +122,53 @@ document.addEventListener("DOMContentLoaded", () => {
   const themeIcon = document.getElementById("theme-icon");
   const grid = document.getElementById("wishlist-grid");
 
-  // Initialize theme
+  // Initialize theme and restore filters from the URL
   initTheme(themeToggle, themeIcon);
+  hydrateFiltersFromURL();
 
   // Render filters
   renderFilters(filtersContainer, getData());
+  const searchInput = document.getElementById("wishlist-search");
+
+  const resetAndRefresh = () => {
+    resetFilters();
+    if (searchInput) searchInput.value = "";
+    refreshWishlist();
+  };
+
+  // Search input
+  if (searchInput) {
+    searchInput.addEventListener("input", () => {
+      setSearchQuery(searchInput.value);
+      refreshWishlist();
+    });
+
+    searchInput.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && searchInput.value) {
+        e.preventDefault();
+        searchInput.value = "";
+        setSearchQuery("");
+        refreshWishlist();
+      }
+    });
+  }
+
+  // Press "/" anywhere outside a field to focus the search input.
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "/" || e.ctrlKey || e.metaKey || e.altKey || !searchInput) {
+      return;
+    }
+
+    const target = e.target;
+    const isTyping =
+      target instanceof HTMLElement &&
+      (target.matches("input, textarea, select") || target.isContentEditable);
+    if (isTyping) return;
+
+    e.preventDefault();
+    searchInput.focus();
+    searchInput.select();
+  });
 
   // Filter event listeners
   filtersContainer.addEventListener("click", (e) => {
@@ -57,7 +179,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const value = btn.dataset.value;
 
     if (btn.id === "reset-filters" || filter === "reset") {
-      resetFilters();
+      resetAndRefresh();
+      return;
     } else if (filter === "tag") {
       toggleTagFilter(value);
     } else if (filter === "priority") {
@@ -71,14 +194,18 @@ document.addEventListener("DOMContentLoaded", () => {
     refreshWishlist();
   });
 
-  // "Limpar filtros" button shown inside the empty state
+  // Empty-state reset and per-card sharing
   grid.addEventListener("click", (e) => {
     if (e.target.closest(".grid-message-action")) {
-      resetFilters();
-      refreshWishlist();
+      resetAndRefresh();
+      return;
     }
+
+    const shareButton = e.target.closest("[data-share-id]");
+    if (shareButton) shareItem(shareButton);
   });
 
   // Initial render
   refreshWishlist();
+  scrollToHash();
 });

@@ -43,12 +43,13 @@ const renderCard = (item, index) => {
             ? `<a href="${escapeHTML(link)}" target="_blank" rel="noopener noreferrer" class="card-btn">Ver Loja ↗</a>`
             : ""
         }
+        <button type="button" class="card-btn card-btn-share" data-share-id="${escapeHTML(String(item.id))}" title="Partilhar este item">Partilhar</button>
       </div>
     </div>
   `;
 
   return `
-    <article class="card ${!hasImage ? "card--no-image" : ""}" style="--card-index: ${index}">
+    <article class="card ${!hasImage ? "card--no-image" : ""}" id="item-${escapeHTML(String(item.id))}" style="--card-index: ${index}">
       ${mediaBlock}
       <div class="card-content">
         <div class="card-header">
@@ -93,6 +94,7 @@ export const renderItems = (grid, data, { hasFilter = false } = {}) => {
 export const renderFilters = (container, data) => {
   if (!container) return;
   const uniqueTags = getUniqueTags(data);
+  const searchValue = getFilterState().search;
 
   const tagsHTML =
     uniqueTags.length > 0
@@ -111,6 +113,21 @@ export const renderFilters = (container, data) => {
       <span class="filters-toggle-title">Filtros</span>
       <span class="filters-toggle-icon" aria-hidden="true">▼</span>
     </button>
+    <div class="filters-search">
+      <input
+        type="search"
+        id="wishlist-search"
+        name="q"
+        class="filters-search-input"
+        value="${escapeHTML(searchValue)}"
+        placeholder="Pesquisar por título, descrição ou tag…"
+        aria-label="Pesquisar na wishlist"
+        aria-keyshortcuts="/"
+        title="Atalho: /"
+        autocomplete="off"
+        maxlength="100"
+      >
+    </div>
     <div class="filters-content" id="filters-content">
       ${tagsHTML}
       <div class="filter-row">

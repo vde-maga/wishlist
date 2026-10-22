@@ -1,9 +1,15 @@
 // Filter system - manages all filtering and sorting logic
 
-import { parsePrice, PRICE_TIERS } from "./utils.js";
+import { normalizeText, parsePrice, PRICE_TIERS } from "./utils.js";
+
+const VALID_PRIORITIES = new Set(["high", "medium", "low"]);
+const VALID_PRICE_RANGES = new Set(["low", "medium", "high"]);
+const VALID_SORT_ORDERS = new Set(["price-asc", "price-desc"]);
+const MAX_SEARCH_LENGTH = 100;
 
 // Filter state
 let activeFilters = {
+  search: "",
   tags: [],
   priority: null,
   priceRange: null,
@@ -25,6 +31,19 @@ export const getUniqueTags = (data) => {
 // Apply filters to data
 export const applyFilters = (data) => {
   let filtered = [...data];
+
+  // Search matches title, description and tags. Every term must be present.
+  const query = normalizeText(activeFilters.search).trim();
+  if (query) {
+    const terms = query.split(/\s+/).filter(Boolean);
+    filtered = filtered.filter((item) => {
+      const tags = Array.isArray(item.tags) ? item.tags : [];
+      const haystack = normalizeText(
+        [item.title, item.description, ...tags].filter(Boolean).join(" "),
+      );
+      return terms.every((term) => haystack.includes(term));
+    });
+  }
 
   // Filter by tags
   if (activeFilters.tags.length > 0) {
@@ -74,6 +93,11 @@ export const applyFilters = (data) => {
   return filtered;
 };
 
+// Set free-text search
+export const setSearchQuery = (query) => {
+  activeFilters.search = String(query ?? "").slice(0, MAX_SEARCH_LENGTH);
+};
+
 // Toggle tag filter
 export const toggleTagFilter = (tag) => {
   const index = activeFilters.tags.indexOf(tag);
@@ -103,6 +127,7 @@ export const setSortOrder = (order) => {
 // Reset all filters
 export const resetFilters = () => {
   activeFilters = {
+    search: "",
     tags: [],
     priority: null,
     priceRange: null,
@@ -119,9 +144,53 @@ export const getFilterState = () => ({
 // Whether any filter or sort is currently active
 export const hasActiveFilter = () => {
   return (
+    activeFilters.search.trim().length > 0 ||
     activeFilters.tags.length > 0 ||
     activeFilters.priority !== null ||
     activeFilters.priceRange !== null ||
     sortOrder !== null
   );
+};
+
+// Restore filter state from the query string so URLs are shareable.
+export const hydrateFiltersFromURL = () => {
+  const params = new URLSearchParams(window.location.search);
+  const tags = (params.get("tags") || "")
+    .split(",")
+    .map((tag) => tag.trim())
+    .filter(Boolean);
+  const priority = params.get("priority");
+  const priceRange = params.get("price");
+  const sort = params.get("sort");
+
+  activeFilters = {
+    search: (params.get("q") || "").slice(0, MAX_SEARCH_LENGTH),
+    tags: [...new Set(tags)],
+    priority: VALID_PRIORITIES.has(priority) ? priority : null,
+    priceRange: VALID_PRICE_RANGES.has(priceRange) ? priceRange : null,
+  };
+  sortOrder = VALID_SORT_ORDERS.has(sort) ? sort : null;
+};
+
+// Keep the URL in sync without adding browser history entries.
+export const syncFiltersToURL = () => {
+  const params = new URLSearchParams();
+  const search = activeFilters.search.trim();
+
+  if (search) params.set("q", search);
+  if (activeFilters.tags.length > 0)
+    params.set("tags", activeFilters.tags.join(","));
+  if (activeFilters.priority) params.set("priority", activeFilters.priority);
+  if (activeFilters.priceRange) params.set("price", activeFilters.priceRange);
+  if (sortOrder) params.set("sort", sortOrder);
+
+  const url = new URL(window.location.href);
+  const query = params.toString();
+  url.search = query ? `?${query}` : "";
+
+  try {
+    window.history.replaceState(null, "", url.toString());
+  } catch {
+    // Best-effort only: file:// previews cannot update the history state.
+  }
 };
