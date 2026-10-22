@@ -44,6 +44,27 @@ export const sanitizeURL = (url) => {
   return "";
 };
 
+// Normalize an item's store links. `links` takes precedence over the legacy
+// single `link` field; invalid URLs are discarded.
+export const getStoreLinks = (item) => {
+  const links = Array.isArray(item?.links) ? item.links : [];
+  const normalized = links
+    .filter((entry) => entry && typeof entry === "object")
+    .map((entry) => ({
+      label:
+        typeof entry.label === "string" && entry.label.trim()
+          ? entry.label.trim()
+          : "Ver Loja",
+      url: sanitizeURL(entry.url),
+    }))
+    .filter((entry) => entry.url);
+
+  if (normalized.length > 0) return normalized;
+
+  const fallback = sanitizeURL(item?.link);
+  return fallback ? [{ label: "Ver Loja", url: fallback }] : [];
+};
+
 // Price tiers used by the filter system (euros).
 export const PRICE_TIERS = {
   low: (value) => value < 50,

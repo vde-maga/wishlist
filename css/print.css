@@ -18,7 +18,8 @@ body {
 .filters-container,
 .theme-toggle,
 .footer,
-.skip-link {
+.skip-link,
+.lightbox {
   display: none !important;
 }
 
@@ -115,6 +116,7 @@ body {
 }
 
 .card-btn {
+  display: block;
   padding: 0;
   border: 0;
   background: transparent;

@@ -9,7 +9,8 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check:js": "node --check data.js && node --check js/app.js && node --check js/filters.js && node --check js/renderer.js && node --check js/storage.js && node --check js/theme.js && node --check js/utils.js"
+    "check:js": "node --check data.js && node --check js/app.js && node --check js/filters.js && node --check js/renderer.js && node --check js/storage.js && node --check js/theme.js && node --check js/utils.js && node --check scripts/check-links.js",
+    "check:links": "node scripts/check-links.js"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",

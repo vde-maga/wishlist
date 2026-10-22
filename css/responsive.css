@@ -64,8 +64,28 @@
     padding: 0.5rem 0.8rem;
     font-size: 0.72rem;
   }
+  .filter-chip {
+    min-height: 44px;
+    padding: 0.5rem 0.7rem;
+  }
+  .budget-input {
+    width: 100%;
+  }
+  .budget-input input {
+    flex: 1;
+    min-height: 44px;
+  }
   .filter-btn.reset {
     margin-left: 0;
+  }
+
+  .lightbox {
+    width: 96vw;
+    max-width: 96vw;
+    max-height: 94vh;
+  }
+  .lightbox-image {
+    max-height: calc(94vh - 4rem);
   }
 
   .theme-toggle {

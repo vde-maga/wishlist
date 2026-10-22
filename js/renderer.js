@@ -1,6 +1,6 @@
 // Card rendering and filter UI - handles all DOM manipulation
 
-import { escapeHTML, sanitizeURL } from "./utils.js";
+import { escapeHTML, getStoreLinks } from "./utils.js";
 import {
   getActiveFilterCount,
   getUniqueTags,
@@ -13,24 +13,133 @@ const PRIORITY_BADGES = {
   low: { text: "IDEIA SOLTA", class: "badge-low" },
 };
 
+const PRIORITY_FILTER_LABELS = {
+  high: "Prioridade alta",
+  medium: "Prioridade média",
+  low: "Prioridade baixa",
+};
+
+const PRICE_FILTER_LABELS = {
+  low: "Preço até 50€",
+  medium: "Preço 50–150€",
+  high: "Preço 150€+",
+};
+
+const SORT_FILTER_LABELS = {
+  "price-asc": "↑ Barato",
+  "price-desc": "↓ Caro",
+  priority: "★ Prioridade",
+  newest: "Recente",
+};
+
+const budgetFormatter = new Intl.NumberFormat("pt-PT", {
+  maximumFractionDigits: 2,
+});
+
 const getPriorityBadge = (priority) => {
   const style = PRIORITY_BADGES[priority] || PRIORITY_BADGES.medium;
   return `<span class="badge ${style.class}">${escapeHTML(style.text)}</span>`;
+};
+
+const renderChip = (type, value, label, removeLabel) => `
+  <button type="button" class="filter-chip" data-remove-filter="${type}"${
+    value ? ` data-value="${escapeHTML(value)}"` : ""
+  } aria-label="${escapeHTML(removeLabel)}">
+    ${escapeHTML(label)} <span aria-hidden="true">×</span>
+  </button>
+`;
+
+const buildActiveFilterChips = (state) => {
+  const chips = [];
+  const search = state.search.trim();
+
+  if (search) {
+    chips.push(
+      renderChip(
+        "search",
+        "",
+        `Pesquisa: “${search}”`,
+        `Remover pesquisa ${search}`,
+      ),
+    );
+  }
+
+  state.tags.forEach((tag) => {
+    chips.push(renderChip("tag", tag, `Tag: ${tag}`, `Remover tag ${tag}`));
+  });
+
+  if (state.priority) {
+    chips.push(
+      renderChip(
+        "priority",
+        state.priority,
+        PRIORITY_FILTER_LABELS[state.priority] || state.priority,
+        "Remover filtro de prioridade",
+      ),
+    );
+  }
+
+  if (state.priceRange) {
+    chips.push(
+      renderChip(
+        "price",
+        state.priceRange,
+        PRICE_FILTER_LABELS[state.priceRange] || state.priceRange,
+        "Remover filtro de preço",
+      ),
+    );
+  }
+
+  if (state.budget !== null) {
+    chips.push(
+      renderChip(
+        "budget",
+        "",
+        `Até ${budgetFormatter.format(state.budget)}€`,
+        "Remover orçamento máximo",
+      ),
+    );
+  }
+
+  if (state.sortOrder) {
+    chips.push(
+      renderChip(
+        "sort",
+        state.sortOrder,
+        `Ordem: ${SORT_FILTER_LABELS[state.sortOrder] || state.sortOrder}`,
+        "Remover ordenação",
+      ),
+    );
+  }
+
+  return chips.join("");
 };
 
 const renderCard = (item, index) => {
   const tags = Array.isArray(item.tags) ? item.tags : [];
   const hasImage = !!item.image;
   const hasPrice = !!item.price;
-  const link = sanitizeURL(item.link);
-  const hasLink = !!link;
+  const hasPriceChecked =
+    hasPrice &&
+    typeof item.priceChecked === "string" &&
+    item.priceChecked.trim();
+  const storeLinks = getStoreLinks(item);
   const hasDescription = !!item.description;
 
   let mediaBlock = "";
   if (hasImage) {
     mediaBlock = `
       <div class="card-image-wrapper">
-        <img src="${escapeHTML(item.image)}" alt="Foto de ${escapeHTML(item.title)}" class="card-image" loading="${index < 3 ? "eager" : "lazy"}" decoding="async" width="640" height="400">
+        <button
+          type="button"
+          class="card-image-button"
+          data-lightbox-src="${escapeHTML(item.image)}"
+          data-lightbox-alt="Foto de ${escapeHTML(item.title)}"
+          aria-label="Ampliar foto de ${escapeHTML(item.title)}"
+          title="Ampliar imagem"
+        >
+          <img src="${escapeHTML(item.image)}" alt="Foto de ${escapeHTML(item.title)}" class="card-image" loading="${index < 3 ? "eager" : "lazy"}" decoding="async" width="640" height="400">
+        </button>
         ${tags.length ? `<div class="card-tags">${tags.map((t) => `<span class="tag">${escapeHTML(t)}</span>`).join("")}</div>` : ""}
       </div>
     `;
@@ -40,13 +149,25 @@ const renderCard = (item, index) => {
 
   const footerBlock = `
     <div class="card-footer ${!hasPrice ? "no-price" : ""}">
-      ${hasPrice ? `<span class="card-price">${escapeHTML(item.price)}</span>` : ""}
+      ${
+        hasPrice
+          ? `<div class="card-price-group">
+              <span class="card-price">${escapeHTML(item.price)}</span>
+              ${
+                hasPriceChecked
+                  ? `<time class="price-checked" datetime="${escapeHTML(item.priceChecked)}">Verificado ${escapeHTML(item.priceChecked)}</time>`
+                  : ""
+              }
+            </div>`
+          : ""
+      }
       <div class="card-actions">
-        ${
-          hasLink
-            ? `<a href="${escapeHTML(link)}" target="_blank" rel="noopener noreferrer" class="card-btn">Ver Loja ↗</a>`
-            : ""
-        }
+        ${storeLinks
+          .map(
+            (storeLink) =>
+              `<a href="${escapeHTML(storeLink.url)}" target="_blank" rel="noopener noreferrer" class="card-btn">${escapeHTML(storeLink.label)} ↗</a>`,
+          )
+          .join("")}
         <button type="button" class="card-btn card-btn-share" data-share-id="${escapeHTML(String(item.id))}" title="Partilhar este item">Partilhar</button>
       </div>
     </div>
@@ -98,7 +219,9 @@ export const renderItems = (grid, data, { hasFilter = false } = {}) => {
 export const renderFilters = (container, data) => {
   if (!container) return;
   const uniqueTags = getUniqueTags(data);
-  const searchValue = getFilterState().search;
+  const state = getFilterState();
+  const searchValue = state.search;
+  const budgetValue = state.budget === null ? "" : String(state.budget);
 
   const tagsHTML =
     uniqueTags.length > 0
@@ -135,6 +258,7 @@ export const renderFilters = (container, data) => {
         maxlength="100"
       >
     </div>
+    <div class="active-filters" id="active-filters" hidden></div>
     <div class="filters-content" id="filters-content">
       ${tagsHTML}
       <div class="filter-row">
@@ -151,6 +275,22 @@ export const renderFilters = (container, data) => {
           <button type="button" class="filter-btn" data-filter="price" data-value="low" aria-pressed="false" title="Até 50€">€</button>
           <button type="button" class="filter-btn" data-filter="price" data-value="medium" aria-pressed="false" title="50€ a 150€">€€</button>
           <button type="button" class="filter-btn" data-filter="price" data-value="high" aria-pressed="false" title="150€ ou mais">€€€</button>
+          <label class="budget-input">
+            <span>Até</span>
+            <input
+              type="number"
+              id="budget-max"
+              name="budget"
+              min="0"
+              step="0.01"
+              inputmode="decimal"
+              value="${escapeHTML(budgetValue)}"
+              placeholder="50"
+              aria-label="Orçamento máximo em euros"
+              title="Mostrar apenas itens até este valor"
+            >
+            <span aria-hidden="true">€</span>
+          </label>
         </div>
       </div>
       <div class="filter-row">
@@ -166,6 +306,7 @@ export const renderFilters = (container, data) => {
         <span class="filter-label">Ações</span>
         <div class="filter-buttons">
           <button type="button" class="filter-btn random" id="random-item" title="Escolher um item aleatório entre os resultados">🎲 Surpreende-me</button>
+          <button type="button" class="filter-btn" id="copy-list" title="Copiar os itens visíveis em Markdown">📋 Copiar lista</button>
           <button type="button" class="filter-btn reset" id="reset-filters">Limpar</button>
         </div>
       </div>
@@ -221,6 +362,13 @@ export const updateFilterButtons = (container) => {
         ? "Filtros"
         : `Filtros, ${activeCount} ${activeCount === 1 ? "filtro ativo" : "filtros ativos"}`,
     );
+  }
+
+  const activeFiltersElement = container.querySelector("#active-filters");
+  if (activeFiltersElement) {
+    const chips = buildActiveFilterChips(state);
+    activeFiltersElement.innerHTML = chips;
+    activeFiltersElement.hidden = !chips;
   }
 
   container.querySelectorAll(".filter-btn").forEach((btn) => {

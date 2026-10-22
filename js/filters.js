@@ -13,12 +13,24 @@ const VALID_SORT_ORDERS = new Set([
 const PRIORITY_WEIGHTS = { high: 3, medium: 2, low: 1 };
 const MAX_SEARCH_LENGTH = 100;
 
+// Parse a budget value from an input or the URL. Empty/invalid values clear it.
+const parseBudget = (value) => {
+  const normalized = String(value ?? "")
+    .trim()
+    .replace(",", ".");
+  if (!normalized) return null;
+
+  const amount = Number(normalized);
+  return Number.isFinite(amount) && amount >= 0 ? amount : null;
+};
+
 // Filter state
 let activeFilters = {
   search: "",
   tags: [],
   priority: null,
   priceRange: null,
+  budget: null,
 };
 
 let sortOrder = null; // 'price-asc' | 'price-desc' | 'priority' | 'newest'
@@ -81,6 +93,16 @@ export const applyFilters = (data) => {
     }
   }
 
+  // Filter by maximum budget. Items without a valid price are kept for the
+  // same reason as the price tiers above.
+  if (activeFilters.budget !== null) {
+    filtered = filtered.filter((item) => {
+      const price = parsePrice(item.price);
+      if (isNaN(price)) return true;
+      return price <= activeFilters.budget;
+    });
+  }
+
   // Sort by price, priority or newest. Items without a price are pushed
   // to the end when sorting by price.
   if (sortOrder === "price-asc" || sortOrder === "price-desc") {
@@ -139,6 +161,11 @@ export const setPriceRangeFilter = (range) => {
   activeFilters.priceRange = activeFilters.priceRange === range ? null : range;
 };
 
+// Set maximum budget (euros); an empty value clears the filter.
+export const setBudgetFilter = (value) => {
+  activeFilters.budget = parseBudget(value);
+};
+
 // Set sort order
 export const setSortOrder = (order) => {
   sortOrder = sortOrder === order ? null : order;
@@ -151,6 +178,7 @@ export const resetFilters = () => {
     tags: [],
     priority: null,
     priceRange: null,
+    budget: null,
   };
   sortOrder = null;
 };
@@ -168,6 +196,7 @@ export const getActiveFilterCount = () => {
     activeFilters.tags.length +
     (activeFilters.priority ? 1 : 0) +
     (activeFilters.priceRange ? 1 : 0) +
+    (activeFilters.budget !== null ? 1 : 0) +
     (sortOrder ? 1 : 0)
   );
 };
@@ -191,6 +220,7 @@ export const hydrateFiltersFromURL = () => {
     tags: [...new Set(tags)],
     priority: VALID_PRIORITIES.has(priority) ? priority : null,
     priceRange: VALID_PRICE_RANGES.has(priceRange) ? priceRange : null,
+    budget: parseBudget(params.get("budget")),
   };
   sortOrder = VALID_SORT_ORDERS.has(sort) ? sort : null;
 };
@@ -205,6 +235,8 @@ export const syncFiltersToURL = () => {
     params.set("tags", activeFilters.tags.join(","));
   if (activeFilters.priority) params.set("priority", activeFilters.priority);
   if (activeFilters.priceRange) params.set("price", activeFilters.priceRange);
+  if (activeFilters.budget !== null)
+    params.set("budget", String(activeFilters.budget));
   if (sortOrder) params.set("sort", sortOrder);
 
   const url = new URL(window.location.href);

@@ -3,15 +3,18 @@
 import { wishlistData } from "../data.js";
 import { initTheme } from "./theme.js";
 import { renderItems, renderFilters, updateFilterButtons } from "./renderer.js";
+import { getStoreLinks } from "./utils.js";
 import {
   toggleTagFilter,
   setPriorityFilter,
   setPriceRangeFilter,
   setSortOrder,
   setSearchQuery,
+  setBudgetFilter,
   resetFilters,
   applyFilters,
   hasActiveFilter,
+  getFilterState,
   hydrateFiltersFromURL,
   syncFiltersToURL,
 } from "./filters.js";
@@ -68,6 +71,40 @@ const shareItem = async (button) => {
     button.textContent = "Copiado!";
   } catch (error) {
     console.error("Error copying item link:", error);
+    button.textContent = "Erro ao copiar";
+  }
+
+  window.setTimeout(() => {
+    button.textContent = originalText;
+  }, 1600);
+};
+
+const copyList = async (button) => {
+  const status = document.getElementById("wishlist-status");
+  const items = applyFilters(getData());
+
+  if (items.length === 0) {
+    if (status) status.textContent = "Não há itens para copiar.";
+    return;
+  }
+
+  const lines = items.map((item) => {
+    const price = item.price ? ` — ${item.price}` : "";
+    const links = getStoreLinks(item)
+      .map((storeLink) => storeLink.url)
+      .join(" | ");
+    return `- **${item.title}**${price}${links ? ` — ${links}` : ""}`;
+  });
+  const text = `# A Minha Wishlist\n\n${lines.join("\n")}`;
+  const originalText = button.textContent;
+
+  try {
+    await copyText(text);
+    if (status) status.textContent = `Lista copiada (${items.length} itens).`;
+    button.textContent = "Copiado!";
+  } catch (error) {
+    console.error("Error copying wishlist:", error);
+    if (status) status.textContent = "Não foi possível copiar a lista.";
     button.textContent = "Erro ao copiar";
   }
 
@@ -160,6 +197,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const themeToggle = document.getElementById("theme-toggle");
   const themeIcon = document.getElementById("theme-icon");
   const grid = document.getElementById("wishlist-grid");
+  const lightbox = document.getElementById("image-lightbox");
+  const lightboxImage = document.getElementById("lightbox-image");
 
   // Initialize theme and restore filters from the URL
   initTheme(themeToggle, themeIcon);
@@ -168,10 +207,19 @@ document.addEventListener("DOMContentLoaded", () => {
   // Render filters
   renderFilters(filtersContainer, getData());
   const searchInput = document.getElementById("wishlist-search");
+  const budgetInput = document.getElementById("budget-max");
+
+  const syncFilterInputs = () => {
+    const state = getFilterState();
+    if (searchInput) searchInput.value = state.search;
+    if (budgetInput) {
+      budgetInput.value = state.budget === null ? "" : String(state.budget);
+    }
+  };
 
   const resetAndRefresh = () => {
     resetFilters();
-    if (searchInput) searchInput.value = "";
+    syncFilterInputs();
     refreshWishlist();
   };
 
@@ -189,6 +237,14 @@ document.addEventListener("DOMContentLoaded", () => {
         setSearchQuery("");
         refreshWishlist();
       }
+    });
+  }
+
+  // Maximum budget input
+  if (budgetInput) {
+    budgetInput.addEventListener("input", () => {
+      setBudgetFilter(budgetInput.value);
+      refreshWishlist();
     });
   }
 
@@ -211,6 +267,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Filter event listeners
   filtersContainer.addEventListener("click", (e) => {
+    const removeChip = e.target.closest("[data-remove-filter]");
+    if (removeChip) {
+      const type = removeChip.dataset.removeFilter;
+      const value = removeChip.dataset.value;
+
+      if (type === "search") setSearchQuery("");
+      else if (type === "tag") toggleTagFilter(value);
+      else if (type === "priority") setPriorityFilter(value);
+      else if (type === "price") setPriceRangeFilter(value);
+      else if (type === "budget") setBudgetFilter("");
+      else if (type === "sort") setSortOrder(value);
+
+      syncFilterInputs();
+      refreshWishlist();
+      return;
+    }
+
     const btn = e.target.closest(".filter-btn");
     if (!btn) return;
 
@@ -219,6 +292,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (btn.id === "random-item") {
       surpriseMe();
+      return;
+    } else if (btn.id === "copy-list") {
+      copyList(btn);
       return;
     } else if (btn.id === "reset-filters" || filter === "reset") {
       resetAndRefresh();
@@ -236,10 +312,42 @@ document.addEventListener("DOMContentLoaded", () => {
     refreshWishlist();
   });
 
-  // Empty-state reset and per-card sharing
+  const openLightbox = (src, alt) => {
+    if (!lightbox || !lightboxImage || !src) return;
+
+    lightboxImage.src = src;
+    lightboxImage.alt = alt || "Imagem ampliada";
+
+    if (typeof lightbox.showModal === "function") {
+      if (!lightbox.open) lightbox.showModal();
+    } else {
+      lightbox.setAttribute("open", "");
+    }
+  };
+
+  if (lightbox) {
+    lightbox.addEventListener("click", (e) => {
+      if (e.target === lightbox) lightbox.close();
+    });
+
+    lightbox.addEventListener("close", () => {
+      if (lightboxImage) lightboxImage.removeAttribute("src");
+    });
+  }
+
+  // Empty-state reset, image lightbox and per-card sharing
   grid.addEventListener("click", (e) => {
     if (e.target.closest(".grid-message-action")) {
       resetAndRefresh();
+      return;
+    }
+
+    const imageButton = e.target.closest("[data-lightbox-src]");
+    if (imageButton) {
+      openLightbox(
+        imageButton.dataset.lightboxSrc,
+        imageButton.dataset.lightboxAlt,
+      );
       return;
     }
 
