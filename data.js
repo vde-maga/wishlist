@@ -99,4 +99,26 @@ export const wishlistData = [
     priority: "medium",
     tags: ["Tech"],
   },
+  {
+    id: 11,
+    title: "Keycaps PBT Black & Gold",
+    description:
+      "Gostava de experimentar melhorar o teclado que tenho. Sei que umas keycaps fazem uma grande diferença no quesito de beleza e a própria performance (que não ligo muito) de um teclado. ",
+    image: "./images/keycapsPBTBlackGold.webp",
+    link: "https://akkogear.eu/products/black-gold-cyrillic-keycap-set-98-key",
+    priority: "low",
+    tags: ["Tech", "Hobby", "Setup"],
+    price: "25,28€",
+  },
+  {
+    id: 12,
+    title: "Teclado Magnético Akko FUN68 HE",
+    description:
+      "Gostava de ter um teclado magnético. Eu já tenho um mecânico e não sou um gamer gamer, mas ainda gostava de experimentar escrever no teclado com tecnologias modernas. Não só isso, como este teclado é de 60%, ao invés dos 100% que eu tenho",
+    image: "./images/tecladoMagneticoFun68.webp",
+    link: "https://gamerunlocked.pt/produto/teclado-gaming-magnetico-akko-monsgeek-fun68-he-65-ansi-rapid-trigger-8k/",
+    priority: "medium",
+    tags: ["Tech", "Gaming", "Setup"],
+    price: "49,90€",
+  },
 ];
