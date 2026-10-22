@@ -53,23 +53,33 @@ valores simples (`38€`), intervalos (`1 a 10€`) e sufixos não-EUR (`3$/mo`)
 - **Tags** — multi-seleção (lógica OR)
 - **Prioridade** — alta / média / baixa
 - **Preço** — `€` (até 50€), `€€` (50–150€), `€€€` (150€+)
-- **Ordenar** — por preço ascendente/descendente
+- **Ordenar** — preço ascendente/descendente, prioridade ou mais recente
+- **Surpreende-me** — escolhe um item aleatório entre os resultados visíveis,
+  faz scroll até ele e destaca-o
 
 Itens sem preço definido nunca são escondidos pelos filtros de preço e são
 colocados no fim quando se ordena por preço.
 
 A pesquisa e os filtros são guardados na query string (por exemplo,
-`?q=teclado&tags=Tech`). O URL pode ser guardado ou partilhado e o estado é
-restaurado ao abrir a página.
+`?q=teclado&tags=Tech&sort=priority`). O URL pode ser guardado ou partilhado e
+o estado é restaurado ao abrir a página.
 
 Em ecrãs pequenos (< 768px) o painel de filtros aparece colapsado por defeito
-para poupar espaço vertical.
+para poupar espaço vertical. O número de filtros ativos fica visível no botão
+**Filtros**.
 
 ## Partilhar um item
 
 Cada card tem um link direto (`#item-12`) e um botão **Partilhar**. Em
 dispositivos com Web Share API abre o menu nativo; nos restantes copia o link
 para a área de transferência.
+
+## Imprimir
+
+O site tem uma folha de estilos de impressão (`css/print.css`) que esconde
+filtros, botões e navegação, e apresenta a wishlist em cards compactos com
+imagem, descrição, preço e link da loja. Usa **Imprimir → Guardar como PDF** no
+browser.
 
 ## Desenvolvimento
 

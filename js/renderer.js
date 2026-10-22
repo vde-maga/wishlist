@@ -1,7 +1,11 @@
 // Card rendering and filter UI - handles all DOM manipulation
 
 import { escapeHTML, sanitizeURL } from "./utils.js";
-import { getUniqueTags, getFilterState } from "./filters.js";
+import {
+  getActiveFilterCount,
+  getUniqueTags,
+  getFilterState,
+} from "./filters.js";
 
 const PRIORITY_BADGES = {
   high: { text: "ALTA PRIORIDADE", class: "badge-high" },
@@ -110,7 +114,10 @@ export const renderFilters = (container, data) => {
 
   container.innerHTML = `
     <button type="button" class="filters-toggle" aria-expanded="true" aria-controls="filters-content">
-      <span class="filters-toggle-title">Filtros</span>
+      <span class="filters-toggle-title">
+        Filtros
+        <span class="filters-count" id="filters-count" aria-hidden="true" hidden></span>
+      </span>
       <span class="filters-toggle-icon" aria-hidden="true">▼</span>
     </button>
     <div class="filters-search">
@@ -144,13 +151,21 @@ export const renderFilters = (container, data) => {
           <button type="button" class="filter-btn" data-filter="price" data-value="low" aria-pressed="false" title="Até 50€">€</button>
           <button type="button" class="filter-btn" data-filter="price" data-value="medium" aria-pressed="false" title="50€ a 150€">€€</button>
           <button type="button" class="filter-btn" data-filter="price" data-value="high" aria-pressed="false" title="150€ ou mais">€€€</button>
+        </div>
+      </div>
+      <div class="filter-row">
+        <span class="filter-label" id="filter-label-sort">Ordenar</span>
+        <div class="filter-buttons" role="group" aria-labelledby="filter-label-sort">
           <button type="button" class="filter-btn" data-filter="sort" data-value="price-asc" aria-pressed="false">↑ Barato</button>
           <button type="button" class="filter-btn" data-filter="sort" data-value="price-desc" aria-pressed="false">↓ Caro</button>
+          <button type="button" class="filter-btn" data-filter="sort" data-value="priority" aria-pressed="false" title="Alta prioridade primeiro">★ Prioridade</button>
+          <button type="button" class="filter-btn" data-filter="sort" data-value="newest" aria-pressed="false" title="Adicionados mais recentemente">Recente</button>
         </div>
       </div>
       <div class="filter-row">
         <span class="filter-label">Ações</span>
         <div class="filter-buttons">
+          <button type="button" class="filter-btn random" id="random-item" title="Escolher um item aleatório entre os resultados">🎲 Surpreende-me</button>
           <button type="button" class="filter-btn reset" id="reset-filters">Limpar</button>
         </div>
       </div>
@@ -190,10 +205,29 @@ const applyCollapseState = (container, content, toggle) => {
 export const updateFilterButtons = (container) => {
   if (!container) return;
   const state = getFilterState();
+  const activeCount = getActiveFilterCount();
+  const countBadge = container.querySelector("#filters-count");
+  const toggle = container.querySelector(".filters-toggle");
+
+  if (countBadge) {
+    countBadge.textContent = String(activeCount);
+    countBadge.hidden = activeCount === 0;
+  }
+
+  if (toggle) {
+    toggle.setAttribute(
+      "aria-label",
+      activeCount === 0
+        ? "Filtros"
+        : `Filtros, ${activeCount} ${activeCount === 1 ? "filtro ativo" : "filtros ativos"}`,
+    );
+  }
 
   container.querySelectorAll(".filter-btn").forEach((btn) => {
     const filter = btn.dataset.filter;
     const value = btn.dataset.value;
+    if (!filter) return;
+
     let isActive = false;
 
     if (filter === "tag") isActive = state.tags.includes(value);
@@ -202,7 +236,6 @@ export const updateFilterButtons = (container) => {
     else if (filter === "sort") isActive = state.sortOrder === value;
 
     btn.classList.toggle("active", isActive);
-    if (filter === "reset") return;
     btn.setAttribute("aria-pressed", String(isActive));
   });
 };

@@ -116,6 +116,45 @@ const scrollToHash = () => {
   });
 };
 
+const revealItem = (id) => {
+  const target = document.getElementById(`item-${id}`);
+  if (!target) return;
+
+  const url = new URL(window.location.href);
+  url.hash = `item-${id}`;
+
+  try {
+    window.history.replaceState(null, "", url.toString());
+  } catch {
+    // Best-effort only: file:// previews cannot update the history state.
+  }
+
+  target.classList.add("card--highlight");
+  window.setTimeout(() => target.classList.remove("card--highlight"), 1800);
+
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  target.scrollIntoView({
+    behavior: reduceMotion ? "auto" : "smooth",
+    block: "start",
+  });
+};
+
+const surpriseMe = () => {
+  const status = document.getElementById("wishlist-status");
+  const items = applyFilters(getData());
+
+  if (items.length === 0) {
+    if (status) status.textContent = "Não há itens para escolher.";
+    return;
+  }
+
+  const item = items[Math.floor(Math.random() * items.length)];
+  if (status) status.textContent = `Item aleatório: ${item.title}`;
+  revealItem(item.id);
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   const filtersContainer = document.getElementById("filters-container");
   const themeToggle = document.getElementById("theme-toggle");
@@ -178,7 +217,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const filter = btn.dataset.filter;
     const value = btn.dataset.value;
 
-    if (btn.id === "reset-filters" || filter === "reset") {
+    if (btn.id === "random-item") {
+      surpriseMe();
+      return;
+    } else if (btn.id === "reset-filters" || filter === "reset") {
       resetAndRefresh();
       return;
     } else if (filter === "tag") {

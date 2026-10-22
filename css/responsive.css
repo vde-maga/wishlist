@@ -43,6 +43,9 @@
   .filters-search-input {
     min-height: 44px;
   }
+  .filters-content {
+    max-height: 1200px;
+  }
   .filter-row {
     flex-direction: column;
     align-items: stretch;

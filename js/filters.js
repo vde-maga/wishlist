@@ -4,7 +4,13 @@ import { normalizeText, parsePrice, PRICE_TIERS } from "./utils.js";
 
 const VALID_PRIORITIES = new Set(["high", "medium", "low"]);
 const VALID_PRICE_RANGES = new Set(["low", "medium", "high"]);
-const VALID_SORT_ORDERS = new Set(["price-asc", "price-desc"]);
+const VALID_SORT_ORDERS = new Set([
+  "price-asc",
+  "price-desc",
+  "priority",
+  "newest",
+]);
+const PRIORITY_WEIGHTS = { high: 3, medium: 2, low: 1 };
 const MAX_SEARCH_LENGTH = 100;
 
 // Filter state
@@ -15,7 +21,7 @@ let activeFilters = {
   priceRange: null,
 };
 
-let sortOrder = null; // 'price-asc' or 'price-desc'
+let sortOrder = null; // 'price-asc' | 'price-desc' | 'priority' | 'newest'
 
 // Extract unique tags from data
 export const getUniqueTags = (data) => {
@@ -75,8 +81,9 @@ export const applyFilters = (data) => {
     }
   }
 
-  // Sort by price. Items without a price are always pushed to the end.
-  if (sortOrder) {
+  // Sort by price, priority or newest. Items without a price are pushed
+  // to the end when sorting by price.
+  if (sortOrder === "price-asc" || sortOrder === "price-desc") {
     const direction = sortOrder === "price-asc" ? 1 : -1;
     filtered.sort((a, b) => {
       const priceA = parsePrice(a.price);
@@ -87,6 +94,19 @@ export const applyFilters = (data) => {
       if (!hasA) return 1;
       if (!hasB) return -1;
       return (priceA - priceB) * direction;
+    });
+  } else if (sortOrder === "priority") {
+    filtered.sort((a, b) => {
+      const priorityA = PRIORITY_WEIGHTS[a.priority] ?? PRIORITY_WEIGHTS.medium;
+      const priorityB = PRIORITY_WEIGHTS[b.priority] ?? PRIORITY_WEIGHTS.medium;
+      return priorityB - priorityA;
+    });
+  } else if (sortOrder === "newest") {
+    filtered.sort((a, b) => {
+      const idA = Number(a.id);
+      const idB = Number(b.id);
+      if (Number.isNaN(idA) || Number.isNaN(idB)) return 0;
+      return idB - idA;
     });
   }
 
@@ -141,16 +161,19 @@ export const getFilterState = () => ({
   sortOrder,
 });
 
-// Whether any filter or sort is currently active
-export const hasActiveFilter = () => {
+// Number of active search terms, tags, filters and sort options.
+export const getActiveFilterCount = () => {
   return (
-    activeFilters.search.trim().length > 0 ||
-    activeFilters.tags.length > 0 ||
-    activeFilters.priority !== null ||
-    activeFilters.priceRange !== null ||
-    sortOrder !== null
+    (activeFilters.search.trim() ? 1 : 0) +
+    activeFilters.tags.length +
+    (activeFilters.priority ? 1 : 0) +
+    (activeFilters.priceRange ? 1 : 0) +
+    (sortOrder ? 1 : 0)
   );
 };
+
+// Whether any filter or sort is currently active
+export const hasActiveFilter = () => getActiveFilterCount() > 0;
 
 // Restore filter state from the query string so URLs are shareable.
 export const hydrateFiltersFromURL = () => {
