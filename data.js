@@ -15,7 +15,7 @@ export const wishlistData = [
         url: "https://diskprices.com/",
       },
     ],
-    priority: "medium",
+    priority: "high",
     tags: ["Tech", "Hobby", "NAS"],
   },
   {
@@ -80,6 +80,7 @@ export const wishlistData = [
     priority: "medium",
     tags: ["Hobby", "Tech", "Anime", "Cinema"],
     price: "3$/mo",
+    image: "./images/torbox.webp",
   },
   {
     id: 6,
@@ -107,20 +108,6 @@ export const wishlistData = [
       "Não gosto de jogar no telemóvel, pois não sinto os botões, no touchscreen. Achava porreiro ter uma consola portátil retro para jogar por aí sem ser dependente do telemóvel.",
     priority: "low",
     image: "./images/psvita.webp",
-    links: [
-      {
-        label: "Facebook Marketplace",
-        url: "https://www.facebook.com/marketplace",
-      },
-      {
-        label: "Wallapop",
-        url: "https://es.wallapop.com/",
-      },
-      {
-        label: "OLX",
-        url: "https://www.olx.pt/",
-      },
-    ],
     tags: ["Tech", "Gaming", "Retro"],
   },
   {
@@ -150,28 +137,15 @@ export const wishlistData = [
       "É o casaco do James Sunderland e do Travis Bickle. É mais que um casaco. É um símbolo da solidão, dureza das ruas e outras coisas todas existencialistas e niilistas. Adorava ter um, pois acho que se encaixa bem com o que sou.",
     priority: "medium",
     image: "./images/m65Casaco.webp",
-    links: [
-      {
-        label: "Grailed",
-        url: "https://www.grailed.com/search/m65%20field%20jacket",
-      },
-      {
-        label: "Vinted",
-        url: "https://www.vinted.pt/catalog?search_text=m65%20casaco",
-      },
-      {
-        label: "Depop",
-        url: "https://www.depop.com/search/?q=m65%20jacket",
-      },
-    ],
-    tags: ["Roupa", "Vintage", "Cinema"],
+
+    tags: ["Roupa", "Cinema"],
   },
   {
     id: 10,
     title: "Google Chromecast",
     description:
       "Eu não consigo dormir sem ver um vídeo do youtube... O meu método antigo morreu... Preciso de um novo.",
-    priority: "medium",
+    priority: "high",
     links: [
       {
         label: "Amazon",
@@ -182,6 +156,7 @@ export const wishlistData = [
         url: "https://www.fnac.pt/search/?search=Google%20Chromecast",
       },
     ],
+    image: "./images/chromecast.webp",
     tags: ["Tech", "Entretenimento"],
     price: "30 a 60€",
   },
@@ -242,28 +217,19 @@ export const wishlistData = [
         url: "https://www.aliexpress.com/w/wholesale-japanese-keycap-set.html",
       },
     ],
-    priority: "medium",
+    priority: "low",
     tags: ["Tech", "Hobby", "Setup", "Keycaps"],
     price: "40 a 90€",
+    image: "./images/keycapsJapan.webp",
   },
   {
     id: 14,
-    title: "Wrist Rest em Madeira ou Cortiça",
+    title: "Wrist Rest",
     description:
-      "Prático e estético. Um wrist rest em madeira maciça ou cortiça, simples e minimalista, que fica muito bem com um setup mais limpo.",
-    links: [
-      {
-        label: "Etsy",
-        url: "https://www.etsy.com/search?q=wooden%20keyboard%20wrist%20rest",
-      },
-      {
-        label: "AliExpress",
-        url: "https://www.aliexpress.com/w/wholesale-wooden-wrist-rest-keyboard.html",
-      },
-    ],
-    priority: "low",
+      "O wrist rest que tenho no meu teclado, está todo escamado. É daquele material rasca, que com o contacto do suor e pele humana, começa a desfazer-se. Ele ainda funciona, mas está meio merdoso... Gostava de ter um novo. O que tenho atualmente, é um duro. Nunca experimentei um daqueles de almofada.",
+    priority: "medium",
     tags: ["Tech", "Setup", "Utilidade"],
-    price: "15 a 40€",
+    image: "./images/wristRest.webp",
   },
   {
     id: 15,
@@ -284,70 +250,5 @@ export const wishlistData = [
     image: "./images/evangelionPoster.webp",
     tags: ["Arte", "Anime", "Cinema", "Poster"],
     price: "5-15€",
-  },
-  {
-    id: 17,
-    title: "Poster - Drive My Car",
-    description:
-      "Gosto muito da atmosfera de Drive My Car. Um poster minimalista ou com fotografia ficava muito bem para contrastar com o resto.",
-    priority: "medium",
-    links: [
-      {
-        label: "Etsy",
-        url: "https://www.etsy.com/search?q=Drive%20My%20Car%20poster",
-      },
-      {
-        label: "Redbubble",
-        url: "https://www.redbubble.com/shop/drive%20my%20car%20poster",
-      },
-      {
-        label: "PosterSpy",
-        url: "https://posterspy.com/?s=drive%20my%20car",
-      },
-    ],
-    tags: ["Arte", "Cinema", "Poster"],
-    price: "10 a 30€",
-  },
-  {
-    id: 18,
-    title: "Poster - The Man Who Stole the Sun",
-    description:
-      "Um filme japonês muito único. Adorava ter um poster deste, preferencialmente com arte minimalista ou num estilo mais vintage.",
-    priority: "medium",
-    links: [
-      {
-        label: "Etsy",
-        url: "https://www.etsy.com/search?q=The%20Man%20Who%20Stole%20the%20Sun%20poster",
-      },
-      {
-        label: "Redbubble",
-        url: "https://www.redbubble.com/shop/the%20man%20who%20stole%20the%20sun%20poster",
-      },
-    ],
-    tags: ["Arte", "Cinema", "Poster", "Japão"],
-    price: "10 a 30€",
-  },
-  {
-    id: 19,
-    title: "Prints Ligne Claire (Blake & Mortimer / Hergé style)",
-    description:
-      "Adoro a estética ligne claire - traços limpos, cores vivas e composição cuidadosa. Prints de Blake & Mortimer, ou ilustrações originais neste estilo ficam lindos emoldurados.",
-    priority: "medium",
-    links: [
-      {
-        label: "Etsy",
-        url: "https://www.etsy.com/search?q=ligne%20claire%20print",
-      },
-      {
-        label: "Redbubble",
-        url: "https://www.redbubble.com/shop/ligne%20claire%20print",
-      },
-      {
-        label: "Wallapop",
-        url: "https://es.wallapop.com/search?keywords=ligne%20claire%20print",
-      },
-    ],
-    tags: ["Arte", "BD", "Poster", "Ligne Claire"],
-    price: "10 a 40€",
   },
 ];
