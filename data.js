@@ -1,5 +1,6 @@
 // Wishlist content - each item may define: id, title, description, image,
-// link, priority (high|medium|low), tags, price.
+// link (legacy single store), links ([{ label, url }]), priority
+// (high|medium|low), tags, price, priceChecked (YYYY-MM-DD).
 
 export const wishlistData = [
   {
@@ -105,10 +106,16 @@ export const wishlistData = [
     description:
       "Gostava de experimentar melhorar o teclado que tenho. Sei que umas keycaps fazem uma grande diferença no quesito de beleza e a própria performance (que não ligo muito) de um teclado. ",
     image: "./images/keycapsPBTBlackGold.webp",
-    link: "https://akkogear.eu/products/black-gold-cyrillic-keycap-set-98-key",
+    links: [
+      {
+        label: "Akko EU",
+        url: "https://akkogear.eu/products/black-gold-cyrillic-keycap-set-98-key",
+      },
+    ],
     priority: "low",
     tags: ["Tech", "Hobby", "Setup"],
     price: "25,28€",
+    priceChecked: "2026-10-22",
   },
   {
     id: 12,
@@ -116,9 +123,19 @@ export const wishlistData = [
     description:
       "Gostava de ter um teclado magnético. Eu já tenho um mecânico e não sou um gamer gamer, mas ainda gostava de experimentar escrever no teclado com tecnologias modernas. Não só isso, como este teclado é de 60%, ao invés dos 100% que eu tenho",
     image: "./images/tecladoMagneticoFun68.webp",
-    link: "https://gamerunlocked.pt/produto/teclado-gaming-magnetico-akko-monsgeek-fun68-he-65-ansi-rapid-trigger-8k/",
+    links: [
+      {
+        label: "Gamer Unlocked",
+        url: "https://gamerunlocked.pt/produto/teclado-gaming-magnetico-akko-monsgeek-fun68-he-65-ansi-rapid-trigger-8k/",
+      },
+      {
+        label: "Akko EU",
+        url: "https://akkogear.eu/products/fun68-he-magnetic-keyboard",
+      },
+    ],
     priority: "medium",
     tags: ["Tech", "Gaming", "Setup"],
     price: "49,90€",
+    priceChecked: "2026-10-22",
   },
 ];

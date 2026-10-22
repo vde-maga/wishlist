@@ -17,6 +17,26 @@
     transform: translateY(0) scale(1);
   }
 }
+@keyframes cardHighlight {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.card--highlight::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 4px solid var(--accent-color);
+  pointer-events: none;
+  animation: cardHighlight 1.6s ease forwards;
+}
 
 /* Only animate cards once JS marks the document as enhanced, so that
    content stays visible without JS (no-JS users / crawlers). */
@@ -35,6 +55,10 @@
     opacity: 1;
     transform: none;
     animation: none;
+  }
+  .card--highlight::after {
+    animation: none;
+    opacity: 1;
   }
   .card:hover,
   .card:active {

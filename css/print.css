@@ -1,0 +1,159 @@
+/* Print stylesheet - compact wishlist for paper/PDF */
+
+@page {
+  margin: 1.4cm;
+}
+
+html,
+body {
+  background: #fff !important;
+  color: #000 !important;
+}
+
+body {
+  font-size: 10pt;
+}
+
+.header-marquee,
+.filters-container,
+.theme-toggle,
+.footer,
+.skip-link,
+.lightbox {
+  display: none !important;
+}
+
+.container {
+  max-width: none;
+  padding: 0;
+}
+
+.intro {
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #000;
+}
+
+.title-massive {
+  margin-bottom: 0.5rem;
+  font-size: 2.4rem;
+  line-height: 1;
+}
+
+.subtitle {
+  font-size: 0.9rem;
+}
+
+.grid-container {
+  display: block;
+}
+
+.card {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 0.8rem;
+  border: 1px solid #000;
+  background: #fff !important;
+  color: #000 !important;
+  box-shadow: none;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.card:hover {
+  box-shadow: none;
+  transform: none;
+}
+
+.card:target,
+.card--highlight::after {
+  outline: none;
+}
+
+.card--highlight::after {
+  display: none;
+}
+
+.card-image-wrapper {
+  flex: 0 0 140px;
+  width: 140px;
+  height: 140px;
+  border-right: 1px solid #000;
+  border-bottom: 0;
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  filter: none;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 0.6rem 0.8rem;
+}
+
+.card-title {
+  font-size: 1.1rem;
+}
+
+.card-desc {
+  margin-bottom: 0.4rem;
+  font-size: 0.8rem;
+}
+
+.card-footer {
+  padding-top: 0.4rem;
+  border-top: 1px dashed #000;
+}
+
+.card-price {
+  font-size: 1rem;
+}
+
+.card-actions {
+  display: block;
+}
+
+.card-btn {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #000;
+  font-size: 0.65rem;
+  overflow-wrap: anywhere;
+}
+
+.card-btn::after {
+  content: " — " attr(href);
+}
+
+.card-btn-share {
+  display: none;
+}
+
+.card-tags {
+  display: none;
+}
+
+.card-tags-top {
+  padding: 0.4rem 0.8rem 0;
+}
+
+.badge,
+.tag {
+  border-color: #000 !important;
+  background: transparent !important;
+  color: #000 !important;
+  box-shadow: none !important;
+}
+
+.card--no-image {
+  border-top: 1px solid #000;
+}
+
+a {
+  color: #000;
+  text-decoration: none;
+}
