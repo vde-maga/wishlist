@@ -248,29 +248,6 @@ export const wishlistData = [
   },
   {
     id: 14,
-    title: "Deskmat XL Minimalista",
-    description:
-      "O complemento perfeito para o teclado e keycaps. Um deskmat XL (900x400mm ou similar) minimalista, em tons neutros ou com arte subtil, ficava brutal a ligar todo o setup.",
-    links: [
-      {
-        label: "Akko EU",
-        url: "https://akkogear.eu/search?q=deskmat",
-      },
-      {
-        label: "Etsy",
-        url: "https://www.etsy.com/search?q=minimalist%20xl%20deskmat",
-      },
-      {
-        label: "AliExpress",
-        url: "https://www.aliexpress.com/w/wholesale-xl-deskmat.html",
-      },
-    ],
-    priority: "medium",
-    tags: ["Tech", "Setup", "Desk"],
-    price: "15 a 40€",
-  },
-  {
-    id: 15,
     title: "Wrist Rest em Madeira ou Cortiça",
     description:
       "Prático e estético. Um wrist rest em madeira maciça ou cortiça, simples e minimalista, que fica muito bem com um setup mais limpo.",
@@ -289,75 +266,31 @@ export const wishlistData = [
     price: "15 a 40€",
   },
   {
-    id: 16,
-    title: "Cabo Coiled USB-C",
+    id: 15,
+    title: "Artbook do Hisashi Eguchi",
+    image: "./images/eguchiArtbook.webp",
     description:
-      "Pequeno detalhe, mas fica brutal num setup. Cabo coiled em cores neutras ou com detalhes minimalistas.",
-    links: [
-      {
-        label: "Akko EU",
-        url: "https://akkogear.eu/search?q=coiled%20cable",
-      },
-      {
-        label: "AliExpress",
-        url: "https://www.aliexpress.com/w/wholesale-coiled-usb-c-cable.html",
-      },
-    ],
+      "Eu esporro-me para as artes deste homem e ter a arte de forma física, seria algo engraçado de ter. Não o daria muito uso, mas isso não é o verdadeiro propósito de uma prenda? Receber prendas porque são uteis é muito adulto... E I mean, eu visto-me com base no que as mulheres dele estão vestidas",
     priority: "low",
-    tags: ["Tech", "Setup", "Cabo"],
-    price: "10 a 30€",
-  },
-  {
-    id: 17,
-    title: "Artbook Japonês",
-    description:
-      "Algo visual para folhear. Gosto de artbooks com ilustrações minimalistas, arquitectura, natureza ou arte moderna japonesa. Não precisa ser enorme, basta ter ilustrações bonitas.",
-    links: [
-      {
-        label: "Amazon",
-        url: "https://www.amazon.es/s?k=Japanese%20artbook",
-      },
-      {
-        label: "Etsy",
-        url: "https://www.etsy.com/search?q=japanese%20art%20book",
-      },
-      {
-        label: "CDJapan",
-        url: "https://www.cdjapan.co.jp/searchuni?q=artbook&order=rel",
-      },
-    ],
-    priority: "medium",
     tags: ["Arte", "Hobby", "Livros"],
     price: "20 a 60€",
   },
   {
-    id: 18,
+    id: 16,
     title: "Poster - The End of Evangelion",
     description:
-      "Um poster bonito do The End of Evangelion. Prefiro algo minimalista, com cores desaturadas ou um print mais artístico, ao invés de cartazes demasiado carregados.",
-    links: [
-      {
-        label: "Etsy",
-        url: "https://www.etsy.com/search?q=The%20End%20of%20Evangelion%20poster",
-      },
-      {
-        label: "Redbubble",
-        url: "https://www.redbubble.com/shop/the%20end%20of%20evangelion%20poster",
-      },
-      {
-        label: "PosterSpy",
-        url: "https://posterspy.com/?s=evangelion",
-      },
-    ],
+      "É um sonho, desde que fiquei bué fã de animes e de Evangelion, ter o poster oficial do The End of Evangelion dos USA. Os posters que tenho no meu setup gamer, já perderam a cor, então, acho uma win-win situation",
     priority: "medium",
+    image: "./images/evangelionPoster.webp",
     tags: ["Arte", "Anime", "Cinema", "Poster"],
-    price: "10 a 40€",
+    price: "5-15€",
   },
   {
-    id: 19,
+    id: 17,
     title: "Poster - Drive My Car",
     description:
-      "Gosto muito da atmosfera do Drive My Car. Um poster minimalista ou com fotografia seria perfeito para pendurar.",
+      "Gosto muito da atmosfera de Drive My Car. Um poster minimalista ou com fotografia ficava muito bem para contrastar com o resto.",
+    priority: "medium",
     links: [
       {
         label: "Etsy",
@@ -372,15 +305,15 @@ export const wishlistData = [
         url: "https://posterspy.com/?s=drive%20my%20car",
       },
     ],
-    priority: "medium",
     tags: ["Arte", "Cinema", "Poster"],
     price: "10 a 30€",
   },
   {
-    id: 20,
+    id: 18,
     title: "Poster - The Man Who Stole the Sun",
     description:
-      "Um filme japonês único. Adorava ter um poster deste, preferencialmente com arte minimalista ou em linha mais vintage.",
+      "Um filme japonês muito único. Adorava ter um poster deste, preferencialmente com arte minimalista ou num estilo mais vintage.",
+    priority: "medium",
     links: [
       {
         label: "Etsy",
@@ -391,15 +324,15 @@ export const wishlistData = [
         url: "https://www.redbubble.com/shop/the%20man%20who%20stole%20the%20sun%20poster",
       },
     ],
-    priority: "medium",
     tags: ["Arte", "Cinema", "Poster", "Japão"],
     price: "10 a 30€",
   },
   {
-    id: 21,
+    id: 19,
     title: "Prints Ligne Claire (Blake & Mortimer / Hergé style)",
     description:
       "Adoro a estética ligne claire - traços limpos, cores vivas e composição cuidadosa. Prints de Blake & Mortimer, ou ilustrações originais neste estilo ficam lindos emoldurados.",
+    priority: "medium",
     links: [
       {
         label: "Etsy",
@@ -414,65 +347,7 @@ export const wishlistData = [
         url: "https://es.wallapop.com/search?keywords=ligne%20claire%20print",
       },
     ],
-    priority: "medium",
     tags: ["Arte", "BD", "Poster", "Ligne Claire"],
     price: "10 a 40€",
-  },
-  {
-    id: 22,
-    title: "Washi Tape Japonês",
-    description:
-      "Pequenos detalhes que alegram. Washi tape com padrões minimalistas, motivos tradicionais ou geométricos japoneses. Ótimo para decorar cadernos ou o setup.",
-    links: [
-      {
-        label: "Etsy",
-        url: "https://www.etsy.com/search?q=japanese%20washi%20tape%20minimal",
-      },
-      {
-        label: "Amazon",
-        url: "https://www.amazon.es/s?k=Japanese%20washi%20tape",
-      },
-    ],
-    priority: "low",
-    tags: ["Arte", "Decoração", "Hobby"],
-    price: "3 a 15€",
-  },
-  {
-    id: 23,
-    title: "Caneca Cerâmica Minimalista",
-    description:
-      "Aconchegante, prática e combina com tudo. Uma caneca cerâmica simples, com acabamento matte ou em tons terrosos, fica sempre bem.",
-    links: [
-      {
-        label: "Etsy",
-        url: "https://www.etsy.com/search?q=minimalist%20ceramic%20mug",
-      },
-      {
-        label: "Amazon",
-        url: "https://www.amazon.es/s?k=caneca%20ceramica%20minimalista",
-      },
-    ],
-    priority: "low",
-    tags: ["Casa", "Utilidade"],
-    price: "10 a 25€",
-  },
-  {
-    id: 24,
-    title: "Tote Bag Minimalista",
-    description:
-      "Prático para o dia a dia. Uma tote bag em canvas cru ou preto, com design minimalista ou inspirado em Linux/tecnologia.",
-    links: [
-      {
-        label: "Etsy",
-        url: "https://www.etsy.com/search?q=minimalist%20canvas%20tote%20bag",
-      },
-      {
-        label: "Redbubble",
-        url: "https://www.redbubble.com/shop/minimalist%20tote%20bag",
-      },
-    ],
-    priority: "low",
-    tags: ["Roupa", "Utilidade"],
-    price: "10 a 25€",
   },
 ];
