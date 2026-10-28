@@ -251,4 +251,36 @@ export const wishlistData = [
     tags: ["Arte", "Anime", "Cinema", "Poster"],
     price: "5-15€",
   },
+  {
+    id: 17,
+    title: "Peluche do Snoopy",
+    description:
+      "É engraçado o peluche e pelo preço mais o tamanho, parece uma excelente prenda. Eu gosto do Snoopy, pois é aquela arte que é fixe de larpar e sou o maior larper do mundo",
+    priority: "low",
+    image: "./images/snoopyPlush.webp",
+    tags: ["Peluche", "Hobby"],
+    price: "6,83€",
+    links: [
+      {
+        label: "AliExpress",
+        url: "https://aliexpress.com/item/1005008569881717.html",
+      },
+    ],
+  },
+  {
+    id: 18,
+    title: "Peluche do Alien do Ikea",
+    description:
+      "Eu gostava de ter, porque ele é uma silly creature, mas o IKEA parou de o vender, pelo menos no IKEA Portugal. Encontrei no Aliexpress. Talvez exista ainda em outras fontes, mas a ideia continua. Eu gostava de o ter",
+    priority: "low",
+    image: "./images/alienPeluche.webp",
+    tags: ["Peluche", "Hobby"],
+    price: "7,96€",
+    links: [
+      {
+        label: "AliExpress",
+        url: "https://aliexpress.com/item/1005009345395049.html",
+      },
+    ],
+  },
 ];
